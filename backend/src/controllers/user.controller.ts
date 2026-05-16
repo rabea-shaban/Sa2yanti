@@ -71,19 +71,15 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       });
       return;
     }
-    const tokeen = Jwt.sign(
-      { id: user._id, name: user.name, email: user.email },
-      process.env.SECRET_KEY as string,
-      {
-        expiresIn: '2d',
-      },
-    );
+    const token = Jwt.sign({ id: user._id, name: user.name }, process.env.SECRET_KEY as string, {
+      expiresIn: '1d',
+    });
 
     res.status(200).json({
       success: true,
       message: 'Login Successfully',
       user,
-      tokeen,
+      token,
     });
   } catch (error: any) {
     res.status(500).json({

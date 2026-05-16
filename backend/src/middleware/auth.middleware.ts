@@ -16,6 +16,7 @@ const auth = async (req: CustomRequest, res: Response, next: NextFunction) => {
 
     const decoded = jwt.verify(token, process.env.SECRET_KEY as string);
     req.user = decoded;
+
     next();
   } catch (error) {
     res.status(401).json({

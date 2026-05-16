@@ -9,7 +9,6 @@ const connectDb = async (): Promise<void> => {
     console.log('Database Connected');
   } catch (error) {
     console.log(error);
-    process.exit(1);
   }
 };
 
