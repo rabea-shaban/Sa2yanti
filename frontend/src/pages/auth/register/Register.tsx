@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -16,6 +17,7 @@ export default function Register() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     mode: 'onChange',
@@ -27,12 +29,15 @@ export default function Register() {
         ...data,
         role: accountType,
       };
-      await axiosInstance.post('auth/register', payload);
-      console.log(payload);
+      const res = await axiosInstance.post('auth/register', payload);
+      reset();
+      toast.success(res.data.message);
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      const msg = err.response?.data.message;
+      console.log(err.response?.data);
 
-      toast.success('تم إنشاء الحساب بنجاح');
-    } catch {
-      toast.error('حدث خطأ أثناء التسجيل');
+      toast.error(`${msg}`);
     }
   };
 

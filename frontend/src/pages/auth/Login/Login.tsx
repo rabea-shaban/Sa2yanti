@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AxiosError } from 'axios';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { FaEnvelope, FaLock, FaTools } from 'react-icons/fa';
@@ -33,10 +34,14 @@ export default function Login() {
       localStorage.setItem('user', res.data.user.name);
       localStorage.setItem('role', res.data.user.role);
       localStorage.setItem('email', res.data.user.email);
-      toast.success('تم تسجيل الدخول بنجاح');
+      toast.success(res.data.message);
+      // console.log(res);
       navigate('/');
-    } catch {
-      toast.error('فشل تسجيل الدخول');
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      const msg = err.response?.data.message;
+
+      toast.error(`${msg}`);
     }
   };
 
