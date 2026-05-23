@@ -2,20 +2,25 @@ import { FaClipboardList, FaSignOutAlt, FaTools, FaUserCircle } from 'react-icon
 
 import { Link, useNavigate } from 'react-router-dom';
 
+import useAuth from '../../hooks/useAuth';
+
+import axiosInstance from '../../services/Api';
+
 export default function Header() {
   const navigate = useNavigate();
 
-  const user = localStorage.getItem('user');
-  const email = localStorage.getItem('email');
-  const role = localStorage.getItem('role');
+  const { user, setUser } = useAuth();
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('email');
-    localStorage.removeItem('role');
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.post('/auth/logout');
 
-    navigate('/auth/login');
+      setUser(null);
+
+      navigate('/auth/login');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -37,7 +42,7 @@ export default function Header() {
           {/* Nav */}
 
           <nav className="flex items-center gap-6">
-            {role === 'user' && (
+            {user?.role === 'user' && (
               <Link
                 to="/orders"
                 className="text-gray-600 hover:text-blue-600 font-medium transition"
@@ -46,7 +51,7 @@ export default function Header() {
               </Link>
             )}
 
-            {role === 'technician' && (
+            {user?.role === 'technician' && (
               <Link
                 to="/dashboard"
                 className="flex items-center gap-2 text-gray-600 hover:text-blue-600 font-medium transition"
@@ -61,9 +66,9 @@ export default function Header() {
 
           <div className="flex items-center gap-3 border-r border-gray-200 pr-6">
             <div className="text-right">
-              <h3 className="font-semibold text-sm text-slate-800">{user || 'مستخدم'}</h3>
+              <h3 className="font-semibold text-sm text-slate-800">{user?.name || 'مستخدم'}</h3>
 
-              <p className="text-xs text-gray-500">{email || 'user@email.com'}</p>
+              <p className="text-xs text-gray-500">{user?.email || 'user@email.com'}</p>
             </div>
 
             <div className="w-11 h-11 rounded-full bg-slate-100 flex items-center justify-center">

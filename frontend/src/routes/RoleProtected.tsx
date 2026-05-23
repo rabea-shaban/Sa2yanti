@@ -1,11 +1,9 @@
 import { Navigate, Outlet } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
 
-type Props = {
-  allowedRoles: string[];
-};
+type Props = { allowedRoles: string[] };
 
 export default function RoleProtected({ allowedRoles }: Props) {
-  const role = localStorage.getItem('role');
-
-  return role && allowedRoles.includes(role) ? <Outlet /> : <Navigate to="/" replace />;
+  const { user } = useAuth();
+  return user && allowedRoles.includes(user.role) ? <Outlet /> : <Navigate to="/" replace />;
 }

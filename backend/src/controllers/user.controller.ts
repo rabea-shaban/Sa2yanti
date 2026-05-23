@@ -74,12 +74,17 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const token = Jwt.sign({ id: user._id, name: user.name }, process.env.SECRET_KEY as string, {
       expiresIn: '1d',
     });
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      maxAge: 2 * 24 * 60 * 60 * 1000,
+    });
 
     res.status(200).json({
       success: true,
       message: 'Login Successfully',
       user,
-      token,
     });
   } catch (error: any) {
     res.status(500).json({
@@ -94,4 +99,29 @@ export const profile = (req: any, res: Response) => {
     success: true,
     user: req.user,
   });
+};
+
+export const logout = async (req: Request, res: Response): Promise<void> => {
+  res.clearCookie('token');
+
+  res.status(200).json({
+    success: true,
+    message: 'Logout Successfully',
+  });
+};
+
+export const me = async (req: any, res: Response): Promise<void> => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };

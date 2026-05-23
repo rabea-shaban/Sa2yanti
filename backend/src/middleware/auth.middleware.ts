@@ -1,20 +1,25 @@
 import { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import Jwt from 'jsonwebtoken';
+
 interface CustomRequest extends Request {
   user?: any;
 }
 
-const auth = async (req: CustomRequest, res: Response, next: NextFunction) => {
+const auth = (req: CustomRequest, res: Response, next: NextFunction): void => {
   try {
-    const token = req.headers.authorization?.split(' ')[1];
+    const token = req.cookies.token;
+
     if (!token) {
-      return res.status(401).json({
+      res.status(401).json({
         success: false,
-        message: 'Unauthorized - Token Required',
+        message: 'Unauthorized',
       });
+
+      return;
     }
 
-    const decoded = jwt.verify(token, process.env.SECRET_KEY as string);
+    const decoded = Jwt.verify(token, process.env.SECRET_KEY as string);
+
     req.user = decoded;
 
     next();

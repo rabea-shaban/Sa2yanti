@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { FaEnvelope, FaLock, FaTools } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
+import useAuth from '../../../hooks/useAuth';
 import axiosInstance from '../../../services/Api';
 
 const loginSchema = z.object({
@@ -16,6 +17,7 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function Login() {
+  const { getMe } = useAuth();
   const {
     register,
     handleSubmit,
@@ -30,18 +32,18 @@ export default function Login() {
     try {
       const res = await axiosInstance.post('auth/login', data);
 
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user', res.data.user.name);
-      localStorage.setItem('role', res.data.user.role);
-      localStorage.setItem('email', res.data.user.email);
       toast.success(res.data.message);
-      // console.log(res);
+      await getMe();
+
       navigate('/');
     } catch (error) {
-      const err = error as AxiosError<{ message: string }>;
+      const err = error as AxiosError<{
+        message: string;
+      }>;
+
       const msg = err.response?.data.message;
 
-      toast.error(`${msg}`);
+      toast.error(msg || 'حدث خطأ');
     }
   };
 
