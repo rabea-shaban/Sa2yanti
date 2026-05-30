@@ -8,12 +8,14 @@ interface CustomRequest extends Request {
 
 export const createOrder = async (req: CustomRequest, res: Response): Promise<void> => {
   try {
-    const { service, location } = req.body;
+    const { service, location, latitude, longitude } = req.body;
 
     const order = await Order.create({
       userID: req.user.id,
       service,
       location,
+      latitude,
+      longitude,
     });
 
     res.status(201).json({
@@ -31,7 +33,14 @@ export const createOrder = async (req: CustomRequest, res: Response): Promise<vo
 
 export const getOrders = async (req: Request, res: Response): Promise<void> => {
   try {
-    const orders = await Order.find().populate('userId', 'name', 'email');
+    const userId = req.user.id;
+
+    const orders = await Order.find({
+      userID: userId,
+    })
+      .populate('userID', 'name email')
+      .populate('technicianId', 'name phone')
+      .sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
@@ -62,4 +71,3 @@ export const getMyOrders = async (req: CustomRequest, res: Response): Promise<vo
     });
   }
 };
-

@@ -71,9 +71,18 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       });
       return;
     }
-    const token = Jwt.sign({ id: user._id, name: user.name }, process.env.SECRET_KEY as string, {
-      expiresIn: '1d',
-    });
+    const token = Jwt.sign(
+      {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+      process.env.SECRET_KEY as string,
+      {
+        expiresIn: '1d',
+      },
+    );
     res.cookie('token', token, {
       httpOnly: true,
       secure: false,

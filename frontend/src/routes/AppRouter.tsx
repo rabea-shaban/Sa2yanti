@@ -5,6 +5,7 @@ import Login from '../pages/auth/Login/Login';
 import Register from '../pages/auth/register/Register';
 
 import Home from '../pages/Home/page';
+import Orders from '../pages/orders/page';
 import ProtectedRoute from './ProtectedRoute';
 import RoleProtected from './RoleProtected';
 
@@ -22,6 +23,10 @@ const AppRouter = createBrowserRouter([
       {
         path: 'about',
         element: <>About</>,
+      },
+      {
+        path: 'orders',
+        element: <Orders />,
       },
 
       {

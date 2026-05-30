@@ -4,13 +4,13 @@ import auth from '../middleware/auth.middleware';
 
 import validate from '../middleware/validate.middleware';
 
+import { createOrder, getMyOrders, getOrders } from '../controllers/order.controller';
+import roleMiddleware from '../middleware/role.middleware';
 import { createOrderSchema } from '../validators/order.validator';
-
-import { createOrder, getOrders, getMyOrders } from '../controllers/order.controller';
 
 const router = express.Router();
 
-router.post('/', auth, validate(createOrderSchema), createOrder);
+router.post('/', auth, roleMiddleware('user'), validate(createOrderSchema), createOrder);
 
 router.get('/', auth, getOrders);
 
