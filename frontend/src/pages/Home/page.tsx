@@ -1,9 +1,7 @@
-import ServiceRequest from '../../components/ui/ServiceRequest';
-
 const Home = () => {
   return (
     <>
-      <ServiceRequest />
+      <h1>lindenig page</h1>
     </>
   );
 };

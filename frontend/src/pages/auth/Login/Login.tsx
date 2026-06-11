@@ -134,7 +134,9 @@ export default function Login() {
           </div>
         </div>
 
-        <p className="text-center mt-6 text-gray-500">← العودة للرئيسية</p>
+        <Link to={'/'} className="text-center mt-6 text-gray-500 block">
+          ← العودة للرئيسية
+        </Link>
       </div>
     </div>
   );

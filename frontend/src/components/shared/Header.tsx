@@ -17,7 +17,7 @@ export default function Header() {
 
       setUser(null);
 
-      navigate('/auth/login');
+      navigate('/');
     } catch (error) {
       console.log(error);
     }
