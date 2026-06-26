@@ -1,26 +1,15 @@
 import { FaClipboardList, FaSignOutAlt, FaTools, FaUserCircle } from 'react-icons/fa';
-
 import { Link, useNavigate } from 'react-router-dom';
-
 import useAuth from '../../hooks/useAuth';
-
-import axiosInstance from '../../services/Api';
 
 export default function Header() {
   const navigate = useNavigate();
 
-  const { user, setUser } = useAuth();
+  const { user, logout } = useAuth();
 
   const handleLogout = async () => {
-    try {
-      await axiosInstance.post('/auth/logout');
-
-      setUser(null);
-
-      navigate('/');
-    } catch (error) {
-      console.log(error);
-    }
+    await logout();
+    navigate('/');
   };
 
   return (
@@ -53,7 +42,7 @@ export default function Header() {
 
             {user?.role === 'technician' && (
               <Link
-                to="/dashboard"
+                to="/technician"
                 className="flex items-center gap-2 text-gray-600 hover:text-blue-600 font-medium transition"
               >
                 <FaClipboardList />

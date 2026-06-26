@@ -3,14 +3,13 @@ interface customRequest extends Request {
   user?: any;
 }
 
-const roleMiddleware = (role: string) => {
+const roleMiddleware = (...roles: string[]) => {
   return (req: customRequest, res: Response, next: NextFunction) => {
-    if (req.user.role !== role) {
+    if (!roles.includes(req.user.role)) {
       res.status(403).json({
         success: false,
         message: 'Access Denied',
       });
-
       return;
     }
     next();

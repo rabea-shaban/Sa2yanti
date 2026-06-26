@@ -5,6 +5,7 @@ import Login from '../pages/auth/Login/Login';
 import Register from '../pages/auth/register/Register';
 
 import LandingPage from '../components/LandingPage/LandingPage';
+import TechnicianDashboard from '../components/technician/TechnicianDashboard';
 import ServiceRequest from '../components/ui/ServiceRequest';
 import Home from '../pages/Home/page';
 import Orders from '../pages/orders/page';
@@ -60,7 +61,11 @@ const AppRouter = createBrowserRouter([
         children: [
           {
             path: 'technician',
-            element: <>Technician Dashboard</>,
+            element: <TechnicianDashboard />,
+          },
+          {
+            path: 'technician/orders',
+            element: <TechnicianDashboard />,
           },
         ],
       },

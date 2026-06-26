@@ -56,9 +56,9 @@ export const getOrders = async (req: CustomRequest, res: Response): Promise<void
 
 export const getMyOrders = async (req: CustomRequest, res: Response): Promise<void> => {
   try {
-    const orders = await Order.find({
-      userID: req.user.id,
-    });
+    const orders = await Order.find({ userID: req.user.id })
+      .populate('technicianId', 'name phone')
+      .sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
@@ -97,27 +97,17 @@ export const acceptOrder = async (req: CustomRequest, res: Response): Promise<vo
     const order = await Order.findById(req.params.id);
 
     if (!order) {
-      res.status(404).json({
-        success: false,
-        message: 'Order not found',
-      });
-
+      res.status(404).json({ success: false, message: 'Order not found' });
       return;
     }
 
     if (order.status !== 'pending') {
-      res.status(400).json({
-        success: false,
-        message: 'Order already assigned',
-      });
-
+      res.status(400).json({ success: false, message: 'Order already assigned' });
       return;
     }
 
     order.technicianId = req.user.id;
-
     order.status = 'accepted';
-
     await order.save();
 
     res.status(200).json({
@@ -126,10 +116,7 @@ export const acceptOrder = async (req: CustomRequest, res: Response): Promise<vo
       order,
     });
   } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -157,28 +144,28 @@ export const updateOrderStatus = async (req: CustomRequest, res: Response): Prom
   try {
     const { status } = req.body;
 
-    const order = await Order.findById(req.params.id);
-
-    if (!order) {
-      res.status(404).json({
-        success: false,
-        message: 'Order not found',
-      });
-
+    const allowedStatuses = ['in-progress', 'completed', 'cancelled'];
+    if (!allowedStatuses.includes(status)) {
+      res.status(400).json({ success: false, message: 'Invalid status value' });
       return;
     }
 
-    if (String(order.technicianId) !== req.user.id) {
-      res.status(403).json({
-        success: false,
-        message: 'Access denied',
-      });
+    const order = await Order.findById(req.params.id);
 
+    if (!order) {
+      res.status(404).json({ success: false, message: 'Order not found' });
+      return;
+    }
+
+    // الفني يرفض طلب pending لم يقبله بعد
+    const isRejectingPending = status === 'cancelled' && order.status === 'pending';
+
+    if (!isRejectingPending && String(order.technicianId) !== req.user.id) {
+      res.status(403).json({ success: false, message: 'Access denied' });
       return;
     }
 
     order.status = status;
-
     await order.save();
 
     res.status(200).json({
@@ -187,9 +174,6 @@ export const updateOrderStatus = async (req: CustomRequest, res: Response): Prom
       order,
     });
   } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };

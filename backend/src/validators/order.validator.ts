@@ -1,4 +1,4 @@
-const Joi = require('joi');
+import Joi from 'joi';
 
 export const createOrderSchema = Joi.object({
   service: Joi.string().required(),

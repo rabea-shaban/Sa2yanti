@@ -25,6 +25,18 @@ const NavBarLind = () => {
     { name: 'كيف يعمل', href: '#how-it-works' },
     { name: 'تواصل معنا', href: '#contact' },
   ];
+  const roleNavItems = {
+    user: [
+      { name: 'طلب خدمة', to: '/app' },
+      { name: 'طلباتي', to: '/orders' },
+    ],
+    technician: [{ name: 'طلبات الصيانة', to: '/technician' }],
+    admin: [
+      { name: 'لوحة التحكم', to: '/admin' },
+      { name: 'إدارة المستخدمين', to: '/admin/users' },
+    ],
+  };
+
   return (
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -50,7 +62,17 @@ const NavBarLind = () => {
                 {item.name}
               </a>
             ))}
-            {role == 'user' && <Link to={'/app'}>طلب خدمة</Link>}
+
+            {user &&
+              roleNavItems[role as keyof typeof roleNavItems]?.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                >
+                  {item.name}
+                </Link>
+              ))}
           </div>
 
           {/* Desktop Auth Buttons */}
@@ -118,6 +140,17 @@ const NavBarLind = () => {
                   {item.name}
                 </a>
               ))}
+              {user &&
+                roleNavItems[role as keyof typeof roleNavItems]?.map((item) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                  >
+                    {item.name}
+                  </Link>
+                ))}
               <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
                 {user ? (
                   <>

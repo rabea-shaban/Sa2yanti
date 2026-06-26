@@ -111,7 +111,11 @@ export const profile = (req: any, res: Response) => {
 };
 
 export const logout = async (req: Request, res: Response): Promise<void> => {
-  res.clearCookie('token');
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: false,
+    sameSite: 'lax',
+  });
 
   res.status(200).json({
     success: true,
