@@ -1,4 +1,4 @@
-# 🚗 صيانتك (Sa2yanti) - Smart Vehicle Maintenance Platform
+# 🚗 صيانتك (Sy2antek) - Smart Vehicle Maintenance Platform
 
 [![React](https://img.shields.io/badge/React-19.2.5-blue?style=for-the-badge&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
