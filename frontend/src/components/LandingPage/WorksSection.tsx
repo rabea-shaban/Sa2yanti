@@ -39,7 +39,7 @@ const WorksSection = () => {
               return (
                 <div
                   key={index}
-                  className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-2"
+                  className="relative bg-white rounded-3xl p-8 border border-slate-100 shadow-md transition duration-300 hover:shadow-lg hover:scale-[1.005]"
                 >
                   <div className="absolute -top-4 -right-4 w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
                     {item.step}

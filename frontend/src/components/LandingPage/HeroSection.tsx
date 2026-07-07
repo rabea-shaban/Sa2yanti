@@ -1,4 +1,3 @@
-import { Wrench } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
@@ -8,28 +7,35 @@ const HeroSection = () => {
     <>
       <section
         id="home"
-        className="relative overflow-hidden bg-gradient-to-b from-blue-50 via-white to-white pt-16 pb-24"
+        className="relative overflow-hidden bg-gradient-to-br from-[#0B1220] via-[#111C30] to-[#0B1220] pt-24 pb-32 text-right"
+        dir="rtl"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Glow decorative gradients in background */}
+        <div className="absolute top-1/4 left-10 w-96 h-96 bg-blue-600 rounded-full opacity-10 blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-orange-600 rounded-full opacity-10 blur-3xl pointer-events-none"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Hero Content */}
-            <div className="text-center lg:text-right">
-              <div className="inline-block px-4 py-2 bg-blue-100 rounded-full text-blue-700 text-sm font-medium mb-6">
-                🚗 منصة صيانة السيارات الأولى في المملكة
+            <div className="text-right">
+              <div className="inline-block px-4 py-2 bg-blue-500/10 border border-blue-500/25 rounded-full text-blue-400 text-xs font-semibold mb-6">
+                🚗 منصة صيانة السيارات الأولى بمصر
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
                 خدمات صيانة السيارات
-                <span className="block bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-                  بسهولة وسرعة
+                <span className="block bg-gradient-to-r from-[#F97316] to-[#EA580C] bg-clip-text text-transparent mt-2">
+                  بمنتهى الاحترافية والسهولة
                 </span>
               </h1>
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                منصة تساعدك في طلب خدمات صيانة السيارات والتواصل مع الفنيين المتخصصين بكل سهولة.
+              <p className="text-lg text-white text-slate-350 mb-8 leading-relaxed max-w-xl">
+                نحن هنا لمساعدتك في طلب خدمات الصيانة الفورية وتوصيلك بأقرب الفنيين والمراكز
+                المعتمدة أينما كنت وفي أي وقت.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-start">
                 <button
                   onClick={() => navigate('/register')}
-                  className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                  className="px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl font-bold transition-all shadow-lg shadow-orange-500/20 transform hover:-translate-y-0.5 cursor-pointer"
                 >
                   إنشاء طلب صيانة
                 </button>
@@ -37,46 +43,38 @@ const HeroSection = () => {
                   onClick={() =>
                     document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })
                   }
-                  className="px-8 py-4 bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-200 rounded-xl font-medium transition-all shadow-md hover:shadow-lg"
+                  className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white border border-white/15 rounded-xl font-bold transition-all shadow-md backdrop-blur-sm transform hover:-translate-y-0.5 cursor-pointer"
                 >
                   تعرف على الخدمات
                 </button>
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-6 mt-12 pt-12 border-t border-gray-200">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-1">+500</div>
-                  <div className="text-sm text-gray-600">عميل راضٍ</div>
+              <div className="grid grid-cols-3 gap-6 mt-12 pt-12 border-t border-slate-800">
+                <div>
+                  <div className="text-3xl font-extrabold text-blue-500 mb-1">+500</div>
+                  <div className="text-xs text-slate-400 font-medium">عميل سعيد</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-1">+50</div>
-                  <div className="text-sm text-gray-600">فني محترف</div>
+                <div>
+                  <div className="text-3xl font-extrabold text-orange-500 mb-1">+50</div>
+                  <div className="text-xs text-slate-400 font-medium">فني محترف</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-1">4.9</div>
-                  <div className="text-sm text-gray-600">تقييم المستخدمين</div>
+                <div>
+                  <div className="text-3xl font-extrabold text-emerald-500 mb-1">4.9</div>
+                  <div className="text-xs text-slate-400 font-medium font-bold">تقييم مستمر</div>
                 </div>
               </div>
             </div>
 
             {/* Hero Image */}
             <div className="relative">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-                <div className="aspect-square bg-gradient-to-br from-blue-100 via-blue-50 to-purple-50 flex items-center justify-center p-12">
-                  <div className="relative w-full h-full flex items-center justify-center">
-                    <Wrench className="w-64 h-64 text-blue-600 opacity-20 absolute" />
-                    <div className="relative bg-white rounded-2xl shadow-xl p-8 transform rotate-3">
-                      <div className="w-48 h-48 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center">
-                        <Wrench className="w-24 h-24 text-white" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-800">
+                <img
+                  src="/hero_car_maintenance.png"
+                  alt="صيانة السيارات"
+                  className="w-full h-auto object-cover transform hover:scale-[1.02] transition duration-700"
+                />
               </div>
-              {/* Decorative Elements */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-blue-200 rounded-full opacity-50 blur-2xl"></div>
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-purple-200 rounded-full opacity-50 blur-2xl"></div>
             </div>
           </div>
         </div>

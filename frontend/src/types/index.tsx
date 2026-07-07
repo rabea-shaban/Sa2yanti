@@ -5,9 +5,17 @@ export interface Order {
   _id: string;
   service: ServiceType;
   location: string;
+  latitude: number;
+  longitude: number;
   status: OrderStatus;
   createdAt: string;
   updatedAt: string;
   userID: { _id: string; name: string; email: string };
-  technicianId?: { _id: string; name: string; phone?: string } | null;
+  technicianId?: {
+    _id: string;
+    name: string;
+    phone?: string;
+  } | null;
+  rating?: number;
+  comment?: string;
 }

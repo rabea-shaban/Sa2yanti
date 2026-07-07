@@ -12,6 +12,7 @@ import {
   getMyOrders,
   getOrders,
   updateOrderStatus,
+  rateOrder,
 } from '../controllers/order.controller';
 import roleMiddleware from '../middleware/role.middleware';
 import { createOrderSchema } from '../validators/order.validator';
@@ -25,5 +26,6 @@ router.get('/my-jobs', auth, roleMiddleware('technician', 'admin'), getMyJobs);
 router.patch('/:id/status', auth, roleMiddleware('technician', 'admin'), updateOrderStatus);
 router.get('/', auth, getOrders);
 router.get('/my', auth, getMyOrders);
+router.post('/:id/rate', auth, roleMiddleware('user'), rateOrder);
 
 export default router;

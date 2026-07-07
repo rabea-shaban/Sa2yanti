@@ -35,6 +35,14 @@ const orderScema = new mongoose.Schema(
       enum: ['pending', 'accepted', 'in-progress', 'completed', 'cancelled'],
       default: 'pending',
     },
+    rating: {
+      type: Number,
+      default: 0, // 0 means unrated
+    },
+    comment: {
+      type: String,
+      default: '',
+    },
   },
   {
     timestamps: true,

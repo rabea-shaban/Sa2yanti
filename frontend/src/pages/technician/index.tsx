@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { FaCheckCircle, FaClipboardList, FaMapMarkerAlt, FaSpinner, FaTools } from 'react-icons/fa';
+import { FaCheckCircle, FaClipboardList, FaMapMarkerAlt, FaSpinner } from 'react-icons/fa';
 import {
   acceptOrder,
   getAvailableOrders,
@@ -92,9 +92,7 @@ export default function TechnicianDashboard() {
     <div className="min-h-screen bg-[#F1F7FF] p-6">
       {/* Header */}
       <div className="flex items-center gap-3 mb-8">
-        <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center">
-          <FaTools className="text-white text-xl" />
-        </div>
+        <img src="/logo.png" alt="صيانتي" className="w-12 h-12 object-contain" />
         <div>
           <h1 className="text-2xl font-bold text-slate-900">لوحة تحكم الفني</h1>
           <p className="text-gray-500 text-sm">إدارة طلبات الصيانة</p>

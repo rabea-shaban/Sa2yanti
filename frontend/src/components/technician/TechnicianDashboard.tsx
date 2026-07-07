@@ -1,7 +1,9 @@
+import LeafletMap from '../ui/LeafletMap';
 import {
   Battery,
   CheckCircle,
   Clock,
+  LogOut,
   MapPin,
   Phone,
   Search,
@@ -20,13 +22,17 @@ import {
   updateOrderStatus,
 } from '../../services/orders';
 
-type Order = {
+type TechOrder = {
   _id: string;
   service: string;
   location: string;
+  latitude: number;
+  longitude: number;
   status: string;
   userID?: { name: string; phone: string };
   createdAt: string;
+  rating?: number;
+  comment?: string;
 };
 
 const SERVICE_ICONS: Record<string, typeof Wrench> = {
@@ -36,11 +42,11 @@ const SERVICE_ICONS: Record<string, typeof Wrench> = {
 };
 
 const STATUS_BADGE: Record<string, string> = {
-  accepted: 'bg-blue-100 text-blue-700',
-  'in-progress': 'bg-purple-100 text-purple-700',
-  completed: 'bg-green-100 text-green-700',
-  cancelled: 'bg-red-100 text-red-700',
-  pending: 'bg-yellow-100 text-yellow-700',
+  accepted: 'bg-blue-50 text-blue-600 border border-blue-200/50',
+  'in-progress': 'bg-orange-50 text-orange-600 border border-orange-200/50',
+  completed: 'bg-emerald-50 text-emerald-600 border border-emerald-200/50',
+  cancelled: 'bg-red-50 text-red-600 border border-red-200/50',
+  pending: 'bg-amber-50 text-amber-600 border border-amber-200/50',
 };
 
 const STATUS_LABEL: Record<string, string> = {
@@ -64,15 +70,26 @@ function Spinner() {
   );
 }
 
+function OrderMap({ lat, lng, myLoc }: { lat: number; lng: number; myLoc: { lat: number; lng: number } | null }) {
+  return (
+    <div className="mt-3 rounded-2xl overflow-hidden border border-slate-200 shadow-sm">
+      <LeafletMap lat={lat} lng={lng} myLoc={myLoc} className="h-44 w-full" />
+    </div>
+  );
+}
+
 export default function TechnicianDashboard() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+
   const [tab, setTab] = useState<'available' | 'my'>('available');
-  const [available, setAvailable] = useState<Order[]>([]);
-  const [myJobs, setMyJobs] = useState<Order[]>([]);
+  const [available, setAvailable] = useState<TechOrder[]>([]);
+  const [myJobs, setMyJobs] = useState<TechOrder[]>([]);
   const [loadingAvailable, setLoadingAvailable] = useState(true);
   const [loadingMy, setLoadingMy] = useState(true);
   const [actionId, setActionId] = useState<string | null>(null);
+  const [openMapId, setOpenMapId] = useState<string | null>(null);
+  const [myLocation, setMyLocation] = useState<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
     getAvailableOrders()
@@ -121,7 +138,9 @@ export default function TechnicianDashboard() {
     setActionId(orderId);
     try {
       await updateOrderStatus(orderId, nextStatus);
-      setMyJobs((prev) => prev.map((o) => (o._id === orderId ? { ...o, status: nextStatus } : o)));
+      setMyJobs((prev) =>
+        prev.map((o) => (o._id === orderId ? { ...o, status: nextStatus } : o)),
+      );
       toast.success(`تم التحديث: ${STATUS_LABEL[nextStatus]}`);
     } catch {
       toast.error('فشل تحديث الحالة');
@@ -130,13 +149,23 @@ export default function TechnicianDashboard() {
     }
   };
 
+  const toggleMap = (id: string) => {
+    setOpenMapId((prev) => (prev === id ? null : id));
+    if (!myLocation) {
+      navigator.geolocation?.getCurrentPosition(
+        (pos) => setMyLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      );
+    }
+  };
+
   const activeJobs = myJobs.filter((o) => o.status !== 'completed' && o.status !== 'cancelled');
   const doneJobs = myJobs.filter((o) => o.status === 'completed');
 
   return (
     <div className="min-h-screen bg-gray-50" dir="rtl">
+
       {/* Header */}
-      {/* <header className="bg-white shadow-sm sticky top-0 z-10">
+      <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
@@ -155,7 +184,7 @@ export default function TechnicianDashboard() {
             خروج
           </button>
         </div>
-      </header> */}
+      </header>
 
       {/* Tabs */}
       <div className="max-w-3xl mx-auto px-4 pt-5">
@@ -168,9 +197,7 @@ export default function TechnicianDashboard() {
           >
             الطلبات المتاحة
             {!loadingAvailable && available.length > 0 && (
-              <span
-                className={`mr-1.5 px-2 py-0.5 rounded-full text-xs ${tab === 'available' ? 'bg-white/20' : 'bg-blue-100 text-blue-600'}`}
-              >
+              <span className={`mr-1.5 px-2 py-0.5 rounded-full text-xs ${tab === 'available' ? 'bg-white/20' : 'bg-blue-100 text-blue-600'}`}>
                 {available.length}
               </span>
             )}
@@ -183,9 +210,7 @@ export default function TechnicianDashboard() {
           >
             طلباتي
             {!loadingMy && activeJobs.length > 0 && (
-              <span
-                className={`mr-1.5 px-2 py-0.5 rounded-full text-xs ${tab === 'my' ? 'bg-white/20' : 'bg-blue-100 text-blue-600'}`}
-              >
+              <span className={`mr-1.5 px-2 py-0.5 rounded-full text-xs ${tab === 'my' ? 'bg-white/20' : 'bg-blue-100 text-blue-600'}`}>
                 {activeJobs.length}
               </span>
             )}
@@ -193,13 +218,65 @@ export default function TechnicianDashboard() {
         </div>
       </div>
 
-      {/* Content */}
-      <main className="max-w-3xl mx-auto px-4 py-5 space-y-4">
+      <main className="max-w-3xl mx-auto px-4 py-5 space-y-5">
+
+        {/* Statistics section */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-2">
+          {/* Card 1: Total Jobs */}
+          <div className="bg-gradient-to-br from-blue-600 to-blue-800 text-white rounded-3xl p-5 shadow-md flex flex-col justify-between h-32 transition hover:scale-[1.02] cursor-default">
+            <div className="flex justify-between items-center">
+              <span className="text-xs font-semibold opacity-90">إجمالي الطلبات</span>
+              <Wrench className="w-4 h-4 opacity-80" />
+            </div>
+            <div>
+              <span className="text-3xl font-extrabold">{myJobs.length}</span>
+              <p className="text-[10px] opacity-75 mt-1">المكلفة والمكتملة</p>
+            </div>
+          </div>
+
+          {/* Card 2: Completed Jobs */}
+          <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-md flex flex-col justify-between h-32 transition hover:scale-[1.02] hover:shadow-lg cursor-default">
+            <div className="flex justify-between items-center text-slate-500">
+              <span className="text-xs font-bold">المهام المكتملة</span>
+              <CheckCircle className="w-4 h-4 text-emerald-500" />
+            </div>
+            <div>
+              <span className="text-3xl font-extrabold text-slate-900">{doneJobs.length}</span>
+              <p className="text-[10px] text-slate-400 mt-1">تمت بنجاح</p>
+            </div>
+          </div>
+
+          {/* Card 3: Active Jobs */}
+          <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-md flex flex-col justify-between h-32 transition hover:scale-[1.02] hover:shadow-lg cursor-default">
+            <div className="flex justify-between items-center text-slate-500">
+              <span className="text-xs font-bold">مهام قيد العمل</span>
+              <Clock className="w-4 h-4 text-orange-500 animate-pulse" />
+            </div>
+            <div>
+              <span className="text-3xl font-extrabold text-slate-900">{activeJobs.length}</span>
+              <p className="text-[10px] text-slate-400 mt-1">جارٍ العمل عليها</p>
+            </div>
+          </div>
+
+          {/* Card 4: Rating */}
+          <div className="bg-gradient-to-br from-orange-500 to-amber-600 text-white rounded-3xl p-5 shadow-md flex flex-col justify-between h-32 transition hover:scale-[1.02] cursor-default">
+            <div className="flex justify-between items-center">
+              <span className="text-xs font-semibold opacity-90">تقييم الأداء</span>
+              <span className="text-sm">★</span>
+            </div>
+            <div>
+              <span className="text-3xl font-extrabold">
+                {user?.rating ? user.rating.toFixed(1) : '5.0'}
+              </span>
+              <p className="text-[10px] opacity-75 mt-1">متوسط تقييم العملاء</p>
+            </div>
+          </div>
+        </div>
+
         {/* ── Available Tab ── */}
-        {tab === 'available' &&
-          (loadingAvailable ? (
-            <Spinner />
-          ) : available.length === 0 ? (
+        {tab === 'available' && (
+          loadingAvailable ? <Spinner /> :
+          available.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
               <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                 <Wrench className="w-10 h-10 text-gray-400" />
@@ -210,8 +287,11 @@ export default function TechnicianDashboard() {
             available.map((order) => {
               const Icon = SERVICE_ICONS[order.service] ?? Wrench;
               const busy = actionId === order._id;
+              const mapOpen = openMapId === order._id;
+              const hasCoords = order.latitude && order.longitude;
+
               return (
-                <div key={order._id} className="bg-white rounded-2xl shadow-sm p-5">
+                <div key={order._id} className="bg-white rounded-3xl p-6 border border-slate-100 shadow-md transition duration-300 hover:shadow-lg hover:scale-[1.005]">
                   <div className="flex items-start gap-4">
                     <div className="w-11 h-11 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
                       <Icon className="w-5 h-5 text-blue-600" />
@@ -228,12 +308,29 @@ export default function TechnicianDashboard() {
                         <span className="truncate">{order.location}</span>
                       </div>
                       {order.userID && (
-                        <div className="flex items-center gap-1.5 text-sm text-gray-500 mb-4">
+                        <div className="flex items-center gap-1.5 text-sm text-gray-500 mb-3">
                           <User className="w-3.5 h-3.5" />
                           <span>{order.userID.name}</span>
                         </div>
                       )}
-                      <div className="flex gap-2">
+
+                      {/* زر الخريطة */}
+                      {hasCoords && (
+                        <button
+                          type="button"
+                          onClick={() => toggleMap(order._id)}
+                          className="flex items-center gap-1.5 text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg mb-3 transition"
+                        >
+                          <MapPin className="w-3 h-3" />
+                          {mapOpen ? 'إخفاء الخريطة' : 'عرض الموقع على الخريطة'}
+                        </button>
+                      )}
+
+                      {mapOpen && hasCoords && (
+                        <OrderMap lat={order.latitude} lng={order.longitude} myLoc={myLocation} />
+                      )}
+
+                      <div className="flex gap-2 mt-3">
                         <button
                           onClick={() => handleAccept(order._id)}
                           disabled={!!actionId}
@@ -256,13 +353,12 @@ export default function TechnicianDashboard() {
                 </div>
               );
             })
-          ))}
+          )
+        )}
 
         {/* ── My Jobs Tab ── */}
-        {tab === 'my' &&
-          (loadingMy ? (
-            <Spinner />
-          ) : (
+        {tab === 'my' && (
+          loadingMy ? <Spinner /> : (
             <>
               {/* Active */}
               {activeJobs.length > 0 && (
@@ -275,11 +371,11 @@ export default function TechnicianDashboard() {
                       const Icon = SERVICE_ICONS[order.service] ?? Wrench;
                       const next = NEXT_STATUS[order.status];
                       const busy = actionId === order._id;
+                      const mapOpen = openMapId === order._id;
+                      const hasCoords = order.latitude && order.longitude;
+
                       return (
-                        <div
-                          key={order._id}
-                          className="bg-white rounded-2xl shadow-sm p-5 border-r-4 border-blue-500"
-                        >
+                        <div key={order._id} className="bg-white rounded-3xl p-6 border border-slate-100 shadow-md border-r-4 border-blue-500 transition duration-300 hover:shadow-lg hover:scale-[1.005]">
                           <div className="flex items-start gap-4">
                             <div className="w-11 h-11 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
                               <Icon className="w-5 h-5 text-blue-600" />
@@ -287,9 +383,7 @@ export default function TechnicianDashboard() {
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between mb-2">
                                 <h3 className="font-semibold text-gray-900">{order.service}</h3>
-                                <span
-                                  className={`text-xs px-2.5 py-1 rounded-full font-medium ${STATUS_BADGE[order.status]}`}
-                                >
+                                <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${STATUS_BADGE[order.status]}`}>
                                   {STATUS_LABEL[order.status]}
                                 </span>
                               </div>
@@ -303,18 +397,32 @@ export default function TechnicianDashboard() {
                                     <User className="w-3.5 h-3.5" />
                                     <span>{order.userID.name}</span>
                                   </div>
-                                  <div className="flex items-center gap-1.5 text-sm text-gray-500 mb-4">
+                                  <div className="flex items-center gap-1.5 text-sm text-gray-500 mb-3">
                                     <Phone className="w-3.5 h-3.5" />
-                                    <a
-                                      href={`tel:${order.userID.phone}`}
-                                      className="text-blue-600 hover:underline font-medium"
-                                    >
+                                    <a href={`tel:${order.userID.phone}`} className="text-blue-600 hover:underline font-medium">
                                       {order.userID.phone}
                                     </a>
                                   </div>
                                 </>
                               )}
-                              <div className="flex gap-2">
+
+                              {/* زر الخريطة */}
+                              {hasCoords && (
+                                <button
+                                  type="button"
+                                  onClick={() => toggleMap(order._id)}
+                                  className="flex items-center gap-1.5 text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg mb-3 transition"
+                                >
+                                  <MapPin className="w-3 h-3" />
+                                  {mapOpen ? 'إخفاء الخريطة' : 'عرض موقع العميل'}
+                                </button>
+                              )}
+
+                              {mapOpen && hasCoords && (
+                                <OrderMap lat={order.latitude} lng={order.longitude} myLoc={myLocation} />
+                              )}
+
+                              <div className="flex gap-2 mt-3">
                                 {next && (
                                   <button
                                     onClick={() => handleStatusUpdate(order._id, next.status)}
@@ -354,10 +462,7 @@ export default function TechnicianDashboard() {
                     {doneJobs.map((order) => {
                       const Icon = SERVICE_ICONS[order.service] ?? Wrench;
                       return (
-                        <div
-                          key={order._id}
-                          className="bg-white rounded-2xl shadow-sm p-5 opacity-70"
-                        >
+                        <div key={order._id} className="bg-white rounded-3xl p-6 border border-slate-100 shadow-md opacity-90 transition duration-300 hover:shadow-lg hover:scale-[1.005]">
                           <div className="flex items-center gap-4">
                             <div className="w-11 h-11 bg-green-100 rounded-xl flex items-center justify-center shrink-0">
                               <Icon className="w-5 h-5 text-green-600" />
@@ -379,6 +484,23 @@ export default function TechnicianDashboard() {
                                 <Clock className="w-3 h-3" />
                                 <span>{new Date(order.createdAt).toLocaleDateString('ar-SA')}</span>
                               </div>
+                              {order.rating ? (
+                                <div className="mt-2 pt-2 border-t border-gray-100 flex flex-col gap-1 text-right">
+                                  <div className="flex items-center gap-1">
+                                    <span className="text-xs font-semibold text-gray-500">تقييم العميل:</span>
+                                    <div className="flex text-amber-500 text-sm">
+                                      {[...Array(5)].map((_, i) => (
+                                        <span key={i}>
+                                          {i < (order.rating || 0) ? '★' : '☆'}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  {order.comment && (
+                                    <p className="text-xs text-gray-600 italic">« {order.comment} »</p>
+                                  )}
+                                </div>
+                              ) : null}
                             </div>
                           </div>
                         </div>
@@ -397,7 +519,8 @@ export default function TechnicianDashboard() {
                 </div>
               )}
             </>
-          ))}
+          )
+        )}
       </main>
     </div>
   );

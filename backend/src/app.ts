@@ -13,8 +13,8 @@ app.use(
     credentials: true,
   }),
 );
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // Routes
 app.get('/', (req, res) => {
@@ -23,7 +23,11 @@ app.get('/', (req, res) => {
 
 import orderRouter from './routes/order.routes';
 import userRouter from './routes/user.router';
+import adminRouter from './routes/admin.routes';
+import technicianRouter from './routes/technician.routes';
 
 app.use('/api/auth', userRouter);
 app.use('/api/orders', orderRouter);
+app.use('/api/admin', adminRouter);
+app.use('/api/technicians', technicianRouter);
 export default app;

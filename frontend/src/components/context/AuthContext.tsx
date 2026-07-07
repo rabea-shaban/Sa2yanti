@@ -1,18 +1,17 @@
 import { createContext, useEffect, useState } from 'react';
 import axiosInstance from '../../services/Api';
+import type { AuthContextType, AuthUser } from '../../types/auth';
 
-export const AuthContext = createContext<any>(null);
+export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
-export default function AuthProvider({ children }: any) {
-  const [user, setUser] = useState(null);
-  const [role, setRole] = useState(null);
+export default function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   const getMe = async () => {
     try {
       const res = await axiosInstance.get('/auth/me');
       setUser(res.data.user);
-      setRole(res.data.user.role);
     } catch {
       setUser(null);
     } finally {
@@ -30,7 +29,7 @@ export default function AuthProvider({ children }: any) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, getMe, logout, role }}>
+    <AuthContext.Provider value={{ user, setUser, loading, getMe, logout }}>
       {children}
     </AuthContext.Provider>
   );

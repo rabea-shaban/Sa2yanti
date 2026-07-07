@@ -39,7 +39,7 @@ export const getOrders = async (req: CustomRequest, res: Response): Promise<void
       userID: userId,
     })
       .populate('userID', 'name email')
-      .populate('technicianId', 'name phone')
+      .populate('technicianId', 'name phone location latitude longitude')
       .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -57,7 +57,7 @@ export const getOrders = async (req: CustomRequest, res: Response): Promise<void
 export const getMyOrders = async (req: CustomRequest, res: Response): Promise<void> => {
   try {
     const orders = await Order.find({ userID: req.user.id })
-      .populate('technicianId', 'name phone')
+      .populate('technicianId', 'name phone location latitude longitude')
       .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -171,6 +171,48 @@ export const updateOrderStatus = async (req: CustomRequest, res: Response): Prom
     res.status(200).json({
       success: true,
       message: 'Status updated successfully',
+      order,
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const rateOrder = async (req: CustomRequest, res: Response): Promise<void> => {
+  try {
+    const { rating, comment } = req.body;
+
+    if (!rating || typeof rating !== 'number' || rating < 1 || rating > 5) {
+      res.status(400).json({ success: false, message: 'التقييم يجب أن يكون رقم بين 1 و 5' });
+      return;
+    }
+
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      res.status(404).json({ success: false, message: 'الطلب غير موجود' });
+      return;
+    }
+
+    if (String(order.userID) !== req.user.id) {
+      res.status(403).json({ success: false, message: 'غير مصرح لك بتقييم هذا الطلب' });
+      return;
+    }
+
+    if (order.status !== 'completed') {
+      res.status(400).json({ success: false, message: 'يمكنك تقييم الطلبات المكتملة فقط' });
+      return;
+    }
+
+    order.rating = rating;
+    if (comment !== undefined) {
+      order.comment = comment;
+    }
+    await order.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'تم إضافة التقييم بنجاح',
       order,
     });
   } catch (error: any) {

@@ -3,8 +3,9 @@ import type { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { FaEnvelope, FaLock, FaPhone, FaTools, FaUser } from 'react-icons/fa';
+import { FaEnvelope, FaLock, FaPhone, FaUser } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import LocationPicker from '../../../components/ui/LocationPicker';
 import { registerSchema, type RegisterFormData } from '../../../schemas/register.schema';
 import axiosInstance from '../../../services/Api';
 
@@ -16,6 +17,7 @@ export default function Register() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
     reset,
   } = useForm<RegisterFormData>({
@@ -23,7 +25,18 @@ export default function Register() {
     mode: 'onChange',
   });
 
+  const handleLocationChange = (loc: string, lat: number, lng: number) => {
+    setValue('location', loc, { shouldValidate: true });
+    setValue('latitude', lat, { shouldValidate: true });
+    setValue('longitude', lng, { shouldValidate: true });
+  };
+
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
+    if (accountType === 'technician' && !data.location) {
+      toast.error('يرجى تحديد موقعك الجغرافي على الخريطة أولاً');
+      return;
+    }
+
     try {
       const payload = {
         ...data,
@@ -43,16 +56,10 @@ export default function Register() {
 
   return (
     <div className="min-h-screen bg-slate-100 flex items-center justify-center p-5">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md my-8">
         {/* Logo */}
-
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-blue-600 rounded-2xl mx-auto flex items-center justify-center">
-            <FaTools className="text-white text-2xl" />
-          </div>
-
-          <h1 className="text-4xl font-bold mt-4">صيانتي</h1>
-
+          <img src="/logo.png" alt="صيانتي" className="w-60 object-contain mx-auto mb-5" />
           <p className="text-gray-500">إنشاء حساب جديد</p>
         </div>
 
@@ -63,110 +70,121 @@ export default function Register() {
             <button
               type="button"
               onClick={() => setAccountType('technician')}
-              className={`py-3 rounded-xl transition
-              ${accountType === 'technician' ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}
+              className={`py-3 rounded-xl transition font-medium
+              ${accountType === 'technician' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600'}`}
             >
-              فني
+              فني (صنايعي)
             </button>
 
             <button
               type="button"
               onClick={() => setAccountType('user')}
-              className={`py-3 rounded-xl transition
-              ${accountType === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}
+              className={`py-3 rounded-xl transition font-medium
+              ${accountType === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600'}`}
             >
-              عميل
+              عميل (مستخدم)
             </button>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
-              <label className="block text-right mb-2">الاسم الكامل</label>
-
+              <label className="block text-right mb-2 font-medium text-gray-700">
+                الاسم الكامل
+              </label>
               <div className="relative">
                 <input
                   dir="rtl"
                   placeholder="أحمد محمد"
                   {...register('name')}
-                  className="w-full border rounded-xl py-3 pr-12 px-4 outline-none"
+                  className="w-full border border-gray-200 rounded-xl py-3 pr-12 px-4 outline-none focus:border-blue-500 transition"
                 />
-
                 <FaUser className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />
               </div>
-
               <p className="text-red-500 text-sm mt-1 text-right">{errors.name?.message}</p>
             </div>
 
             <div>
-              <label className="block text-right mb-2">رقم الجوال</label>
-
+              <label className="block text-right mb-2 font-medium text-gray-700">رقم الهاتف</label>
               <div className="relative">
                 <input
                   dir="rtl"
-                  placeholder="05xxxxxxxx"
+                  placeholder="01xxxxxxxxx"
                   {...register('phone')}
-                  className="w-full border rounded-xl py-3 pr-12 px-4 outline-none"
+                  className="w-full border border-gray-200 rounded-xl py-3 pr-12 px-4 outline-none focus:border-blue-500 transition"
                 />
-
                 <FaPhone className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />
               </div>
-
               <p className="text-red-500 text-sm mt-1 text-right">{errors.phone?.message}</p>
             </div>
 
             <div>
-              <label className="block text-right mb-2">البريد الإلكتروني</label>
-
+              <label className="block text-right mb-2 font-medium text-gray-700">
+                البريد الإلكتروني
+              </label>
               <div className="relative">
                 <input
                   dir="rtl"
                   placeholder="example@email.com"
                   {...register('email')}
-                  className="w-full border rounded-xl py-3 pr-12 px-4 outline-none"
+                  className="w-full border border-gray-200 rounded-xl py-3 pr-12 px-4 outline-none focus:border-blue-500 transition"
                 />
-
                 <FaEnvelope className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />
               </div>
-
               <p className="text-red-500 text-sm mt-1 text-right">{errors.email?.message}</p>
             </div>
 
             <div>
-              <label className="block text-right mb-2">كلمة المرور</label>
-
+              <label className="block text-right mb-2 font-medium text-gray-700">كلمة المرور</label>
               <div className="relative">
                 <input
                   type="password"
                   dir="rtl"
                   placeholder="********"
                   {...register('password')}
-                  className="w-full border rounded-xl py-3 pr-12 px-4 outline-none"
+                  className="w-full border border-gray-200 rounded-xl py-3 pr-12 px-4 outline-none focus:border-blue-500 transition"
                 />
-
                 <FaLock className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />
               </div>
-
               <p className="text-red-500 text-sm mt-1 text-right">{errors.password?.message}</p>
             </div>
 
+            {/* Conditionally display Geographic Location for Technicians */}
+            {accountType === 'technician' && (
+              <div className="space-y-3 pt-2 border-t border-gray-100">
+                <input type="hidden" {...register('location')} />
+                <input type="hidden" {...register('latitude')} />
+                <input type="hidden" {...register('longitude')} />
+                <label className="block text-right font-medium text-gray-700">
+                  الموقع الجغرافي للعمل
+                </label>
+                <div className="border border-gray-200 rounded-2xl overflow-hidden shadow-inner">
+                  <LocationPicker onLocationChange={handleLocationChange} />
+                </div>
+              </div>
+            )}
+
             <button
               disabled={isSubmitting}
-              className="w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 disabled:opacity-50"
+              className="w-full bg-blue-600 text-white py-3.5 rounded-xl hover:bg-blue-700 disabled:opacity-50 font-bold transition duration-200"
             >
-              {isSubmitting ? 'جاري الإنشاء...' : 'إنشاء الحساب'}
+              {isSubmitting ? 'جاري إنشاء الحساب...' : 'إنشاء الحساب'}
             </button>
           </form>
 
           <div className="text-center mt-6">
             <span className="text-gray-500">لديك حساب بالفعل؟</span>
-
-            <Link to="/auth/login" className="text-blue-600 mr-2">
+            <Link to="/auth/login" className="text-blue-600 mr-2 font-medium">
               تسجيل الدخول
             </Link>
           </div>
         </div>
 
-        <p className="text-center mt-6 text-gray-500">← العودة للرئيسية</p>
+        <Link
+          to="/"
+          className="block text-center mt-6 text-gray-500 hover:text-gray-700 transition"
+        >
+          ← العودة للرئيسية
+        </Link>
       </div>
     </div>
   );

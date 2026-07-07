@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { FaEnvelope, FaLock, FaTools } from 'react-icons/fa';
+import { FaEnvelope, FaLock } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import useAuth from '../../../hooks/useAuth';
@@ -35,7 +35,10 @@ export default function Login() {
       toast.success(res.data.message);
       await getMe();
 
-      navigate('/');
+      const role = res.data.user?.role;
+      if (role === 'technician') navigate('/technician', { replace: true });
+      else if (role === 'admin') navigate('/admin', { replace: true });
+      else navigate('/app', { replace: true });
     } catch (error) {
       const err = error as AxiosError<{
         message: string;
@@ -53,11 +56,8 @@ export default function Login() {
         {/* Logo */}
 
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-blue-600 rounded-2xl mx-auto flex items-center justify-center">
-            <FaTools className="text-white text-2xl" />
-          </div>
+          <img src="/logo.png" alt="صيانتي" className="w-60 object-contain mx-auto mb-5" />
 
-          <h1 className="text-4xl font-bold mt-4">صيانتي</h1>
 
           <p className="text-gray-500">مرحباً بعودتك</p>
         </div>

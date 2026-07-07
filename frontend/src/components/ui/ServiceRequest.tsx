@@ -1,28 +1,33 @@
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FaBatteryHalf, FaSearch, FaWrench } from 'react-icons/fa';
+import { FaWrench } from 'react-icons/fa';
 import axiosInstance from '../../services/Api';
 import LocationPicker from './LocationPicker';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
-type ServiceType = 'تغيير زيت' | 'بطارية' | 'كشف أعطال';
+interface ServiceItem {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+  image?: string;
+  isActive: boolean;
+}
 
 type FormValues = {
-  service: ServiceType;
+  service: string;
   location: string;
   latitude: number;
   longitude: number;
 };
 
-const services = [
-  { title: 'تغيير زيت' as ServiceType, icon: <FaWrench />, color: 'bg-blue-500' },
-  { title: 'بطارية' as ServiceType, icon: <FaBatteryHalf />, color: 'bg-orange-500' },
-  { title: 'كشف أعطال' as ServiceType, icon: <FaSearch />, color: 'bg-purple-500' },
-];
-
 export default function ServiceRequest() {
   const navigate = useNavigate();
+  const [servicesList, setServicesList] = useState<ServiceItem[]>([]);
+  const [loadingServices, setLoadingServices] = useState(true);
+
   const {
     register,
     handleSubmit,
@@ -32,6 +37,23 @@ export default function ServiceRequest() {
   } = useForm<FormValues>();
 
   const selected = watch('service');
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        setLoadingServices(true);
+        const res = await axiosInstance.get('/auth/services');
+        if (res.data.success) {
+          setServicesList(res.data.services);
+        }
+      } catch (err) {
+        toast.error('فشل في تحميل قائمة الخدمات المتاحة');
+      } finally {
+        setLoadingServices(false);
+      }
+    };
+    fetchServices();
+  }, []);
 
   const handleLocationChange = (location: string, lat: number, lng: number) => {
     setValue('location', location, { shouldValidate: true });
@@ -66,25 +88,40 @@ export default function ServiceRequest() {
         <input type="hidden" {...register('latitude')} />
         <input type="hidden" {...register('longitude')} />
 
-        <label className="block text-right text-gray-700 mb-6">اختر نوع الخدمة</label>
+        <label className="block text-right text-lg font-bold text-gray-700 mb-6">اختر نوع الخدمة</label>
 
-        <div className="grid md:grid-cols-3 gap-5 mb-4">
-          {services.map((service) => (
-            <button
-              key={service.title}
-              type="button"
-              onClick={() => setValue('service', service.title, { shouldValidate: true })}
-              className={`border rounded-3xl h-36 flex flex-col items-center justify-center gap-3 transition duration-300
-                ${selected === service.title ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}
-                hover:shadow-md`}
-            >
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl ${service.color}`}>
-                {service.icon}
-              </div>
-              <span className="font-medium">{service.title}</span>
-            </button>
-          ))}
-        </div>
+        {loadingServices ? (
+          <div className="flex justify-center py-12">
+            <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : servicesList.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">لا توجد خدمات متاحة حالياً.</div>
+        ) : (
+          <div className="grid md:grid-cols-3 gap-5 mb-6">
+            {servicesList.map((service) => (
+              <button
+                key={service._id}
+                type="button"
+                onClick={() => setValue('service', service.name, { shouldValidate: true })}
+                className={`border rounded-3xl p-5 min-h-[144px] flex flex-col items-center justify-center gap-3 transition duration-300 cursor-pointer
+                  ${selected === service.name ? 'border-blue-500 bg-blue-50/50 shadow-md' : 'border-gray-200'}
+                  hover:shadow-md`}
+              >
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl overflow-hidden shrink-0 bg-blue-600">
+                  {service.image ? (
+                    <img src={service.image} alt={service.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <FaWrench />
+                  )}
+                </div>
+                <div className="text-center">
+                  <span className="font-bold block text-sm text-slate-800">{service.name}</span>
+                  <span className="text-xs text-blue-600 font-bold block mt-1">{service.price} ج.م</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
 
         {errors.service && (
           <p className="text-red-500 text-sm text-right mb-6">{errors.service.message}</p>
@@ -98,8 +135,8 @@ export default function ServiceRequest() {
 
         <button
           type="submit"
-          disabled={isSubmitting}
-          className="w-full h-16 mt-8 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 transition disabled:opacity-50"
+          disabled={isSubmitting || loadingServices || servicesList.length === 0}
+          className="w-full h-16 mt-8 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 transition duration-200 disabled:opacity-50 font-bold text-lg"
         >
           {isSubmitting ? 'جاري الإرسال...' : 'اطلب الخدمة'}
         </button>

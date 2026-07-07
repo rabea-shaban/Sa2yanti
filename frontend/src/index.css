@@ -1,6 +1,314 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;850;900&family=Outfit:wght@400;500;600;700;800&display=swap');
 @import 'tailwindcss';
 @import 'leaflet/dist/leaflet.css';
 
+@theme {
+  /* Brand mappings */
+  --color-primary: #00274C;
+  --color-primary-dark: #001C38;
+  --color-navy: #00152B;
+  --color-orange-accent: #EE5A0E;
+  --color-orange-hover: #D44B07;
+  --color-background-slate: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-text-dark: #00274C;
+  --color-text-secondary: #64748B;
+  --color-success-green: #22C55E;
+  --color-warning-amber: #F59E0B;
+  --color-danger-rose: #EF4444;
+
+  /* Tailwind Standard Override Mappings directly to logo colors */
+  --color-blue-50: #F0F5FA;
+  --color-blue-100: #E0EBF5;
+  --color-blue-200: #C2D7EB;
+  --color-blue-300: #93C5FD;
+  --color-blue-400: #60A5FA;
+  --color-blue-500: #3B82F6;
+  --color-blue-600: #00274C;
+  --color-blue-700: #001C38;
+  --color-blue-800: #00152B;
+  --color-blue-900: #001021;
+  --color-orange-500: #EE5A0E;
+  --color-orange-600: #D44B07;
+}
+
 body {
-  background: #f1f7ff;
+  font-family: 'Tajawal', 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: #F8FAFC;
+  color: #00274C;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom premium scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Base custom classes for consistent modern design system */
+.premium-card {
+  background-color: #FFFFFF;
+  border: 1px solid #F1F5F9;
+  border-radius: 1.5rem; /* rounded-3xl */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  background-color: #00274C;
+  color: #FFFFFF;
+  font-weight: 600;
+  border-radius: 0.75rem; /* rounded-xl */
+  box-shadow: 0 4px 6px -1px rgba(0, 39, 76, 0.15);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #001C38;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px -2px rgba(0, 39, 76, 0.25);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  background-color: #FFFFFF;
+  color: #00274C;
+  border: 1.5px solid #00274C;
+  font-weight: 600;
+  border-radius: 0.75rem; /* rounded-xl */
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: #F0F5FA;
+  transform: translateY(-1px);
+}
+
+.btn-orange {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  background-color: #EE5A0E;
+  color: #FFFFFF;
+  font-weight: 600;
+  border-radius: 0.75rem; /* rounded-xl */
+  box-shadow: 0 4px 6px -1px rgba(238, 90, 14, 0.15);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.btn-orange:hover {
+  background-color: #D44B07;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px -2px rgba(238, 90, 14, 0.25);
+}
+
+/* Admin Light Mode CSS Rules */
+.admin-light,
+.admin-light main {
+  background-color: #F8FAFC !important;
+  color: #00274C !important;
+}
+
+.admin-light aside,
+.admin-light header {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  color: #00274C !important;
+}
+
+.admin-light .bg-slate-900,
+.admin-light .bg-slate-950,
+.admin-light .bg-slate-850,
+.admin-light .bg-slate-900\/50,
+.admin-light .bg-slate-900\/60,
+.admin-light .bg-slate-950\/80,
+.admin-light .bg-slate-800,
+.admin-light .bg-slate-805,
+.admin-light .bg-slate-880 {
+  background-color: #FFFFFF !important;
+  color: #00274C !important;
+  border-color: #E2E8F0 !important;
+}
+
+.admin-light .border-slate-800,
+.admin-light .border-slate-700,
+.admin-light .border-slate-850 {
+  border-color: #E2E8F0 !important;
+}
+
+/* Strict Text Overrides in Light Mode to ensure perfect readability */
+.admin-light .text-slate-400,
+.admin-light .text-slate-500,
+.admin-light .text-slate-350,
+.admin-light .text-slate-300,
+.admin-light .text-slate-250,
+.admin-light .text-slate-200,
+.admin-light .text-slate-100,
+.admin-light .text-slate-50,
+.admin-light .text-white,
+.admin-light td,
+.admin-light th {
+  color: #475569 !important;
+}
+
+.admin-light h1,
+.admin-light h2,
+.admin-light h3,
+.admin-light h4,
+.admin-light h5,
+.admin-light h6,
+.admin-light th,
+.admin-light .font-bold,
+.admin-light .font-semibold,
+.admin-light .text-white,
+.admin-light p.text-white,
+.admin-light h3.text-white,
+.admin-light span.text-white {
+  color: #00274C !important;
+}
+
+.admin-light input,
+.admin-light select,
+.admin-light textarea {
+  background-color: #FFFFFF !important;
+  color: #00274C !important;
+  border-color: #CBD5E1 !important;
+}
+
+.admin-light tr:hover {
+  background-color: #F1F5F9 !important;
+}
+
+/* Admin Dark Mode CSS Rules - Pure Pitch Black */
+.admin-dark,
+.admin-dark main {
+  background-color: #000000 !important;
+  color: #F8FAFC !important;
+}
+
+.admin-dark aside,
+.admin-dark header {
+  background-color: #000000 !important;
+  border-color: #1E293B !important;
+  color: #F8FAFC !important;
+}
+
+.admin-dark .bg-slate-900,
+.admin-dark .bg-slate-950,
+.admin-dark .bg-slate-850,
+.admin-dark .bg-slate-900\/50,
+.admin-dark .bg-slate-900\/60,
+.admin-dark .bg-slate-950\/80,
+.admin-dark .bg-slate-800,
+.admin-dark .bg-slate-805,
+.admin-dark .bg-slate-880 {
+  background-color: #000000 !important;
+  color: #F8FAFC !important;
+  border-color: #1E293B !important;
+}
+
+.admin-dark .border-slate-800,
+.admin-dark .border-slate-700,
+.admin-dark .border-slate-850 {
+  border-color: #1E293B !important;
+}
+
+.admin-dark .text-slate-400,
+.admin-dark .text-slate-500 {
+  color: #94A3B8 !important;
+}
+
+.admin-dark input,
+.admin-dark select,
+.admin-dark textarea {
+  background-color: #000000 !important;
+  color: #F8FAFC !important;
+  border-color: #1E293B !important;
+}
+
+.admin-dark tr:hover {
+  background-color: #0F172A !important;
+}
+
+/* Sidebar Link Base styles */
+.sidebar-link {
+  transition: all 200ms ease-in-out;
+  cursor: pointer;
+}
+
+/* Sidebar Links overrides for Light Mode */
+.admin-light .sidebar-link {
+  color: #475569 !important;
+}
+
+.admin-light .sidebar-link:hover {
+  background-color: #F1F5F9 !important;
+  color: #00274C !important;
+}
+
+.admin-light .sidebar-link:hover span {
+  color: #00274C !important;
+}
+
+.admin-light .sidebar-link.active {
+  background-color: #00274C !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(0, 39, 76, 0.15) !important;
+}
+
+.admin-light .sidebar-link.active span {
+  color: #FFFFFF !important;
+}
+
+/* Sidebar Links overrides for Dark Mode */
+.admin-dark .sidebar-link {
+  color: #94A3B8 !important;
+}
+
+.admin-dark .sidebar-link:hover {
+  background-color: #0F172A !important;
+  color: #FFFFFF !important;
+}
+
+.admin-dark .sidebar-link:hover span {
+  color: #FFFFFF !important;
+}
+
+.admin-dark .sidebar-link.active {
+  background-color: #EE5A0E !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(238, 90, 14, 0.2) !important;
+}
+
+.admin-dark .sidebar-link.active span {
+  color: #FFFFFF !important;
 }

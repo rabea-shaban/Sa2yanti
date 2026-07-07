@@ -57,7 +57,7 @@ const ServicesSection = () => {
             return (
               <div
                 key={index}
-                className="group bg-white border-2 border-gray-100 rounded-2xl p-6 hover:border-blue-200 hover:shadow-xl transition-all transform hover:-translate-y-1"
+                className="group bg-white rounded-3xl p-6 border border-slate-100 shadow-md transition duration-300 hover:shadow-lg hover:scale-[1.005]"
               >
                 <div
                   className={`w-14 h-14 bg-gradient-to-br ${

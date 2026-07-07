@@ -39,7 +39,7 @@ const FeaturesSection = () => {
             return (
               <div
                 key={index}
-                className="bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-all transform hover:-translate-y-1"
+                className="bg-white rounded-3xl p-6 text-center border border-slate-100 shadow-md transition duration-300 hover:shadow-lg hover:scale-[1.005]"
               >
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Icon className="w-8 h-8 text-blue-600" />

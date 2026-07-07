@@ -9,6 +9,9 @@ export const registerSchema = Joi.object({
   phone: Joi.string().required(),
 
   role: Joi.string().valid('user', 'technician').default('user'),
+  location: Joi.string().allow('', null).optional(),
+  latitude: Joi.number().allow(null).optional(),
+  longitude: Joi.number().allow(null).optional(),
 });
 
 export const loginSchema = Joi.object({
