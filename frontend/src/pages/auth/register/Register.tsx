@@ -44,11 +44,9 @@ export default function Register() {
         role: accountType,
       };
       const res = await axiosInstance.post('auth/register', payload);
-      toast.success(res.data.message || 'تم إنشاء الحساب بنجاح! جاري توجيهك لصفحة تسجيل الدخول...');
+      toast.success(res.data.message || 'تم إنشاء الحساب بنجاح!');
       reset();
-      setTimeout(() => {
-        navigate('/auth/login');
-      }, 1500);
+      navigate('/auth/login');
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
       const msg = err.response?.data.message;
