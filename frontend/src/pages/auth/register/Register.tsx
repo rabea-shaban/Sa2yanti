@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { FaEnvelope, FaLock, FaPhone, FaUser } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LocationPicker from '../../../components/ui/LocationPicker';
 import { registerSchema, type RegisterFormData } from '../../../schemas/register.schema';
 import axiosInstance from '../../../services/Api';
@@ -12,6 +12,7 @@ import axiosInstance from '../../../services/Api';
 type AccountType = 'user' | 'technician';
 
 export default function Register() {
+  const navigate = useNavigate();
   const [accountType, setAccountType] = useState<AccountType>('user');
 
   const {
@@ -43,8 +44,11 @@ export default function Register() {
         role: accountType,
       };
       const res = await axiosInstance.post('auth/register', payload);
+      toast.success(res.data.message || 'تم إنشاء الحساب بنجاح! جاري توجيهك لصفحة تسجيل الدخول...');
       reset();
-      toast.success(res.data.message);
+      setTimeout(() => {
+        navigate('/auth/login');
+      }, 1500);
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
       const msg = err.response?.data.message;
