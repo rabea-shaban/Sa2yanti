@@ -9,7 +9,7 @@ app.use(cookieParser());
 // Middlewares
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://sy2antek.vercel.app',
     credentials: true,
   }),
 );
@@ -21,10 +21,10 @@ app.get('/', (req, res) => {
   res.send('API Running...');
 });
 
-import orderRouter from './routes/order.routes';
-import userRouter from './routes/user.router';
 import adminRouter from './routes/admin.routes';
+import orderRouter from './routes/order.routes';
 import technicianRouter from './routes/technician.routes';
+import userRouter from './routes/user.router';
 
 app.use('/api/auth', userRouter);
 app.use('/api/orders', orderRouter);

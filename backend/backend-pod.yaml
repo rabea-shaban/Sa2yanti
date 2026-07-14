@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+
+metadata:
+  name: seyantak-backend
+  labels:
+    app: seyantak-backend
+
+spec:
+  containers:
+    - name: backend
+      image: seyantak-backend:v1
+      imagePullPolicy: Never
+
+      ports:
+        - containerPort: 5000
