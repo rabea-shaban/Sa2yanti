@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import axiosInstance from '../../services/Api';
 import toast from 'react-hot-toast';
-import { FaUser, FaEnvelope, FaPhone, FaLock, FaSave, FaArrowRight } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaPhone, FaLock, FaSave, FaArrowRight, FaWrench } from 'react-icons/fa';
 import LocationPicker from '../../components/ui/LocationPicker';
 
 export default function Profile() {
@@ -19,6 +19,21 @@ export default function Profile() {
   const [longitude, setLongitude] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
 
+  const [allServices, setAllServices] = useState<any[]>([]);
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (user?.role === 'technician') {
+      axiosInstance.get('/auth/services')
+        .then(res => {
+          if (res.data.success) {
+            setAllServices(res.data.services || []);
+          }
+        })
+        .catch(err => console.error('Failed to fetch services:', err));
+    }
+  }, [user]);
+
   useEffect(() => {
     if (user) {
       setName(user.name || '');
@@ -27,6 +42,11 @@ export default function Profile() {
       setLocation(user.location || '');
       setLatitude(user.latitude || 0);
       setLongitude(user.longitude || 0);
+      
+      const serviceIds = (user.services || []).map((s: any) => 
+        typeof s === 'object' ? s._id : s
+      );
+      setSelectedServices(serviceIds);
     }
   }, [user]);
 
@@ -58,6 +78,7 @@ export default function Profile() {
         payload.location = location;
         payload.latitude = latitude;
         payload.longitude = longitude;
+        payload.services = selectedServices;
       }
 
       const res = await axiosInstance.put('/auth/profile', payload);
@@ -197,6 +218,61 @@ export default function Profile() {
                   الموقع المحدد حالياً: <span className="font-semibold text-slate-700">{location}</span>
                 </p>
               )}
+            </div>
+          )}
+
+          {/* Services checklist for Technicians */}
+          {user?.role === 'technician' && allServices.length > 0 && (
+            <div className="space-y-4 pt-5 border-t border-slate-100 text-right">
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block text-right">الخدمات التي تقدمها</label>
+              <p className="text-xs text-slate-400 -mt-2">حدد جميع الخدمات الميكانيكية أو الكهربائية التي تستطيع القيام بها:</p>
+              
+              <div className="space-y-5 max-h-[300px] overflow-y-auto pr-1 border border-slate-100 rounded-2xl p-4 bg-slate-50/50">
+                {Object.entries(
+                  allServices.reduce((acc: any, service: any) => {
+                    const categoryName = service.category?.name || 'أخرى';
+                    if (!acc[categoryName]) acc[categoryName] = [];
+                    acc[categoryName].push(service);
+                    return acc;
+                  }, {})
+                ).map(([categoryName, services]: any) => (
+                  <div key={categoryName} className="space-y-2">
+                    <h5 className="text-xs font-extrabold text-blue-600 border-b border-blue-50/50 pb-1 flex items-center gap-1.5 flex-row-reverse">
+                      <FaWrench size={10} />
+                      {categoryName}
+                    </h5>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-right">
+                      {services.map((serv: any) => {
+                        const isChecked = selectedServices.includes(serv._id);
+                        return (
+                          <label
+                            key={serv._id}
+                            className={`flex items-center gap-2.5 p-2.5 rounded-xl border transition-all duration-200 cursor-pointer select-none flex-row-reverse justify-end ${
+                              isChecked
+                                ? 'bg-blue-50/40 border-blue-200 text-blue-800'
+                                : 'bg-white border-slate-200/60 hover:bg-slate-50 text-slate-650'
+                            }`}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => {
+                                setSelectedServices(prev =>
+                                  prev.includes(serv._id)
+                                    ? prev.filter(id => id !== serv._id)
+                                    : [...prev, serv._id]
+                                );
+                              }}
+                              className="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500 cursor-pointer accent-blue-600"
+                            />
+                            <span className="text-xs font-semibold">{serv.name}</span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 

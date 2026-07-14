@@ -187,7 +187,7 @@ export const me = async (req: any, res: Response): Promise<void> => {
 
 export const updateProfile = async (req: any, res: Response): Promise<void> => {
   try {
-    const { name, email, phone, password, location, latitude, longitude } = req.body;
+    const { name, email, phone, password, location, latitude, longitude, services } = req.body;
     const user = await User.findById(req.user.id);
 
     if (!user) {
@@ -232,6 +232,10 @@ export const updateProfile = async (req: any, res: Response): Promise<void> => {
       };
     }
 
+    if (user.role === 'technician' && services !== undefined) {
+      user.services = services;
+    }
+
     await user.save();
 
     const token = Jwt.sign(
@@ -264,6 +268,7 @@ export const updateProfile = async (req: any, res: Response): Promise<void> => {
         location: (user as any).location,
         latitude: (user as any).latitude,
         longitude: (user as any).longitude,
+        services: user.services,
       },
     });
   } catch (error: any) {

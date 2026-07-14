@@ -10,6 +10,7 @@ export interface AuthUser {
   latitude?: number;
   longitude?: number;
   rating?: number;
+  services?: any[];
 }
 
 export interface AuthContextType {
