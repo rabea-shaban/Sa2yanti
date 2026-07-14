@@ -59,7 +59,7 @@ export default function Register() {
       <div className="w-full max-w-md my-8">
         {/* Logo */}
         <div className="text-center mb-8">
-          <img src="/logo.png" alt="صيانتي" className="w-60 object-contain mx-auto mb-5" />
+          <img src="/logo.png" alt="صيانتك" className="w-60 object-contain mx-auto mb-5" />
           <p className="text-gray-500">إنشاء حساب جديد</p>
         </div>
 

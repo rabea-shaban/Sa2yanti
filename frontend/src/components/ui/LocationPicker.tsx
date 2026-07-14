@@ -24,7 +24,7 @@ async function reverseGeocode(lat: number, lng: number): Promise<string> {
       {
         headers: {
           'Accept-Language': 'ar',
-          'User-Agent': 'Sa2yantiGraduationProject/1.0 (contact: admin@sa2yanti.com)',
+          'User-Agent': 'sy2antekGraduationProject/1.0 (contact: admin@sy2antek.com)',
         },
       },
     );

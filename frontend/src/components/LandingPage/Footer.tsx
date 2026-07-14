@@ -57,8 +57,8 @@ export default function Footer() {
               <Wrench className="w-6 h-6 text-white" />
             </div>
             <div>
-              <p className="text-2xl font-extrabold text-white leading-tight">صيانتي</p>
-              <p className="text-xs text-[#EE5A0E]">Sa2yanti Platform</p>
+              <p className="text-2xl font-extrabold text-white leading-tight">صيانتك</p>
+              <p className="text-xs text-[#EE5A0E]">sy2antek Platform</p>
             </div>
           </div>
           <p className="text-slate-300 text-sm text-center md:text-right max-w-md leading-relaxed">
@@ -186,7 +186,7 @@ export default function Footer() {
       <div className="border-t border-slate-850/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-slate-500">
-            © {new Date().getFullYear()} صيانتي. جميع الحقوق محفوظة.
+            © {new Date().getFullYear()} صيانتك. جميع الحقوق محفوظة.
           </p>
           <div className="flex items-center gap-4 text-xs text-slate-500">
             <a href="#" className="hover:text-slate-350 transition-colors">

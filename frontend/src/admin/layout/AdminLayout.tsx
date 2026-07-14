@@ -65,7 +65,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* 1. Sidebar (Desktop) */}
       <aside className="hidden lg:flex flex-col w-64 border-l border-slate-800 bg-slate-900 shrink-0">
         <div className="h-16 flex items-center justify-center px-6 border-b border-slate-800">
-          <img src={theme === 'light' ? '/logo.png' : '/logoWhite.png'} alt="صيانتي" className="w-20 object-contain" />
+          <img src={theme === 'light' ? '/logo.png' : '/logoWhite.png'} alt="صيانتك" className="w-20 object-contain" />
         </div>
 
         {/* Navigation */}
@@ -111,7 +111,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         }`}
       >
         <div className="h-16 flex items-center justify-between w-full px-6 border-b border-slate-800">
-          <img src={theme === 'light' ? '/logo.png' : '/logoWhite.png'} alt="صيانتي" className="w-20 object-contain" />
+          <img src={theme === 'light' ? '/logo.png' : '/logoWhite.png'} alt="صيانتك" className="w-20 object-contain" />
           <button onClick={() => setMobileOpen(false)} className="text-slate-400 hover:text-white">
             <X size={20} />
           </button>

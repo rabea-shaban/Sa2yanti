@@ -9,15 +9,15 @@ export const seedSuperAdmin = async (): Promise<void> => {
     // 1. Seed Super Admin
     const superAdminExists = await User.findOne({ role: 'super_admin' });
     if (!superAdminExists) {
-      const hashedPassword = await bcrypt.hash('Admin@123', 10);
+      const hashedPassword = await bcrypt.hash('302060', 10);
       await User.create({
         name: 'Super Admin',
-        email: 'admin@sa2yanti.com',
+        email: 'rabea@admin',
         phone: '0000000000',
         password: hashedPassword,
         role: 'super_admin',
       });
-      console.log('✔ Super Admin created successfully (admin@sa2yanti.com / Admin@123)');
+      console.log('✔ Super Admin created successfully (rabea@admin / 302060)');
     } else {
       console.log('✔ Super Admin already exists.');
     }
@@ -26,14 +26,14 @@ export const seedSuperAdmin = async (): Promise<void> => {
     const settingsExist = await Settings.findOne();
     if (!settingsExist) {
       await Settings.create({
-        websiteName: 'Sa2yanti',
+        websiteName: 'sy2antek',
         logo: '/logo.png',
-        supportEmail: 'support@sa2yanti.com',
+        supportEmail: 'support@sy2antek.com',
         phone: '+962700000000',
         socialMedia: {
-          facebook: 'https://facebook.com/sa2yanti',
-          twitter: 'https://twitter.com/sa2yanti',
-          instagram: 'https://instagram.com/sa2yanti',
+          facebook: 'https://facebook.com/sy2antek',
+          twitter: 'https://twitter.com/sy2antek',
+          instagram: 'https://instagram.com/sy2antek',
         },
         address: 'العدوة، المنيا، مصر',
         maintenanceMode: false,
@@ -165,62 +165,127 @@ export const seedSuperAdmin = async (): Promise<void> => {
     }
 
     // 6. Seed Default Technicians
-    const technicianExists = await User.findOne({ role: 'technician' });
-    if (!technicianExists) {
-      const hashedPassword = await bcrypt.hash('Tech@123', 10);
-      const defaultTechs = [
-        {
-          name: 'أحمد محمد - مركز صيانة النور',
-          email: 'ahmed@tech.com',
-          phone: '01011111111',
-          password: hashedPassword,
-          role: 'technician' as const,
-          location: 'الشارع: جسر السويس - القرية: عين شمس - المركز: عين شمس - المحافظة: القاهرة',
-          latitude: 30.125,
-          longitude: 31.332,
-          rating: 4.8,
-          completedJobs: 120,
-          avatar: '',
-        },
-        {
-          name: 'محمود علي - الفني المتميز',
-          email: 'mahmoud@tech.com',
-          phone: '01022222222',
-          password: hashedPassword,
-          role: 'technician' as const,
-          location: 'الشارع: مكرم عبيد - القرية: المنطقة السادسة - المركز: مدينة نصر - المحافظة: القاهرة',
-          latitude: 30.062,
-          longitude: 31.345,
-          rating: 4.5,
-          completedJobs: 85,
-          avatar: '',
-        },
-        {
-          name: 'مصطفى محمود - صيانة الأمانة',
-          email: 'mostafa@tech.com',
-          phone: '01033333333',
-          password: hashedPassword,
-          role: 'technician' as const,
-          location: 'الشارع: الشارع الرئيسي - القرية: القايات - المركز: العدوة - المحافظة: المنيا',
-          latitude: 28.625,
-          longitude: 30.686,
-          rating: 4.9,
-          completedJobs: 210,
-          avatar: '',
-        },
-      ];
+    await User.deleteMany({ role: 'technician' });
+    console.log('✔ Cleared old technicians for fresh seed.');
 
-      for (const t of defaultTechs) {
-        await User.create({
-          ...t,
-          services: serviceIds,
-          locationGeo: {
-            type: 'Point',
-            coordinates: [t.longitude, t.latitude],
-          },
-        });
-        console.log(`✔ Seeded Technician: ${t.name}`);
-      }
+    const hashedPassword = await bcrypt.hash('Tech@123', 10);
+    const defaultTechs = [
+      {
+        name: 'أحمد محمد - مركز صيانة النور (عين شمس)',
+        email: 'ahmed@tech.com',
+        phone: '01011111111',
+        password: hashedPassword,
+        role: 'technician' as const,
+        location: 'الشارع: جسر السويس - القرية: عين شمس - المركز: عين شمس - المحافظة: القاهرة',
+        latitude: 30.125,
+        longitude: 31.332,
+        rating: 4.8,
+        completedJobs: 120,
+        avatar: '',
+      },
+      {
+        name: 'المهندس شريف - مركز صيانة هليوبوليس (مصر الجديدة)',
+        email: 'sherif@tech.com',
+        phone: '01012345678',
+        password: hashedPassword,
+        role: 'technician' as const,
+        location: 'الشارع: شارع الأهرام - القرية: الكوربة - المركز: مصر الجديدة - المحافظة: القاهرة',
+        latitude: 30.0905,
+        longitude: 31.3228,
+        rating: 4.9,
+        completedJobs: 180,
+        avatar: '',
+      },
+      {
+        name: 'مركز الفهد لصيانة الميكانيكا (المعادي)',
+        email: 'fahed@tech.com',
+        phone: '01122334455',
+        password: hashedPassword,
+        role: 'technician' as const,
+        location: 'الشارع: شارع 9 - القرية: ثكنات المعادي - المركز: المعادي - المحافظة: القاهرة',
+        latitude: 29.9602,
+        longitude: 31.2618,
+        rating: 4.7,
+        completedJobs: 145,
+        avatar: '',
+      },
+      {
+        name: 'أبو خطوة - لخدمات التكييف والكهرباء (الزمالك)',
+        email: 'abukhotwa@tech.com',
+        phone: '01233445566',
+        password: hashedPassword,
+        role: 'technician' as const,
+        location: 'الشارع: شارع 26 يوليو - القرية: الزمالك - المركز: غرب القاهرة - المحافظة: القاهرة',
+        latitude: 30.0612,
+        longitude: 31.2205,
+        rating: 4.6,
+        completedJobs: 98,
+        avatar: '',
+      },
+      {
+        name: 'المركز الألماني لصيانة السيارات (مدينة نصر)',
+        email: 'german@tech.com',
+        phone: '01066778899',
+        password: hashedPassword,
+        role: 'technician' as const,
+        location: 'الشارع: شارع عباس العقاد - القرية: المنطقة الأولى - المركز: مدينة نصر - المحافظة: القاهرة',
+        latitude: 30.0638,
+        longitude: 31.3392,
+        rating: 4.8,
+        completedJobs: 320,
+        avatar: '',
+      },
+      {
+        name: 'الأسطورة لصيانة الإطارات والفرامل (الدقي)',
+        email: 'legend@tech.com',
+        phone: '01511223344',
+        password: hashedPassword,
+        role: 'technician' as const,
+        location: 'الشارع: شارع التحرير - القرية: الدقي - المركز: الدقي - المحافظة: الجيزة',
+        latitude: 30.0384,
+        longitude: 31.2114,
+        rating: 4.9,
+        completedJobs: 250,
+        avatar: '',
+      },
+      {
+        name: 'ميكانيكي العاصمة (وسط البلد)',
+        email: 'capital@tech.com',
+        phone: '01099887766',
+        password: hashedPassword,
+        role: 'technician' as const,
+        location: 'الشارع: شارع طلعت حرب - القرية: وسط البلد - المركز: عابدين - المحافظة: القاهرة',
+        latitude: 30.0468,
+        longitude: 31.2384,
+        rating: 4.5,
+        completedJobs: 110,
+        avatar: '',
+      },
+      {
+        name: 'مصطفى محمود - صيانة الأمانة (العدوة)',
+        email: 'mostafa@tech.com',
+        phone: '01033333333',
+        password: hashedPassword,
+        role: 'technician' as const,
+        location: 'الشارع: الشارع الرئيسي - القرية: القايات - المركز: العدوة - المحافظة: المنيا',
+        latitude: 28.625,
+        longitude: 30.686,
+        rating: 4.9,
+        completedJobs: 210,
+        avatar: '',
+      },
+    ];
+
+    for (const t of defaultTechs) {
+      await User.create({
+        ...t,
+        services: serviceIds,
+        locationGeo: {
+          type: 'Point',
+          coordinates: [t.longitude, t.latitude],
+        },
+      });
+      console.log(`✔ Seeded Technician: ${t.name}`);
     }
 
   } catch (error) {

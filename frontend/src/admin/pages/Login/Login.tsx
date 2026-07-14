@@ -38,9 +38,9 @@ export default function Login() {
     <div className="min-h-screen bg-slate-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans" dir="rtl">
       <div className="sm:mx-auto sm:w-full sm:max-w-md flex flex-col items-center">
         {/* Logo */}
-        <img src="/logo.png" alt="صيانتي" className="w-80 object-contain mb-4" />
+        <img src="/logo.png" alt="صيانتك" className="w-80 object-contain mb-4" />
         <h2 className="text-center text-3xl font-extrabold text-white tracking-tight">
-          بوابة الإدارة - صيانتي
+          بوابة الإدارة - صيانتك
         </h2>
         <p className="mt-2 text-center text-sm text-slate-400">
           تسجيل الدخول للمسؤولين فقط (Super Admin)
@@ -66,7 +66,7 @@ export default function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="block w-full pr-10 pl-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-white placeholder-slate-700 text-sm focus:outline-none transition-all duration-200 text-right"
-                  placeholder="admin@sa2yanti.com"
+                  placeholder="rabea@admin"
                 />
               </div>
             </div>

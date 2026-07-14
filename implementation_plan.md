@@ -1,6 +1,6 @@
-# Super Admin System Implementation Plan (Sa2yanti)
+# Super Admin System Implementation Plan (sy2antek)
 
-We will introduce a complete Super Admin System to the **Sa2yanti** project. The implementation includes backend changes (seed script, new models, custom auth middleware, REST endpoints) and frontend changes (a completely isolated `/admin` portal containing pages for Dashboard, User Management, Technician Management, Order Management, Service CRUD, Category CRUD, Statistics, and System Settings).
+We will introduce a complete Super Admin System to the **sy2antek** project. The implementation includes backend changes (seed script, new models, custom auth middleware, REST endpoints) and frontend changes (a completely isolated `/admin` portal containing pages for Dashboard, User Management, Technician Management, Order Management, Service CRUD, Category CRUD, Statistics, and System Settings).
 
 All additions will be isolated where possible, ensuring no existing functionality is broken.
 
@@ -57,8 +57,8 @@ We will implement the following changes in the backend directory:
 
 ##### [NEW] [seed.ts](file:///d:/Fainal Project/Sa2yanti/backend/src/utils/seed.ts)
 - Creates `super_admin` account if it does not exist:
-  - Email: `admin@sa2yanti.com`
-  - Password: `Admin@123` (hashed using bcrypt)
+  - Email: `rabea@admin`
+  - Password: `302060` (hashed using bcrypt)
   - Name: `Super Admin`
   - Phone: `0000000000`
   - Role: `super_admin`
@@ -204,7 +204,7 @@ We will construct the admin portal in isolation within `frontend/src/admin`.
    - Access `/admin/dashboard` while logged out, assert redirect to `/admin/login`.
    - Access admin routes while logged in as a normal user/technician, assert 403 / redirect to unauthorized page.
 3. **Admin Actions Verify**:
-   - Log in using `admin@sa2yanti.com` / `Admin@123`.
+   - Log in using `rabea@admin` / `302060`.
    - Perform full CRUD actions on Categories and Services.
    - Block/Unblock a user and verify that they can no longer log in.
    - Assign a technician to a pending order and verify the status changes.

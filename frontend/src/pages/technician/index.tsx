@@ -92,7 +92,7 @@ export default function TechnicianDashboard() {
     <div className="min-h-screen bg-[#F1F7FF] p-6">
       {/* Header */}
       <div className="flex items-center gap-3 mb-8">
-        <img src="/logo.png" alt="صيانتي" className="w-12 h-12 object-contain" />
+        <img src="/logo.png" alt="صيانتك" className="w-12 h-12 object-contain" />
         <div>
           <h1 className="text-2xl font-bold text-slate-900">لوحة تحكم الفني</h1>
           <p className="text-gray-500 text-sm">إدارة طلبات الصيانة</p>

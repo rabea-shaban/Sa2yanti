@@ -44,7 +44,7 @@ const NavBarLind = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
-            <img src="/logo.png" alt="صيانتي" className="w-28 object-contain" />
+            <img src="/logo.png" alt="صيانتك" className="w-28 object-contain" />
           </Link>
 
           {/* Desktop Navigation */}

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/sa2yanti')
+mongoose.connect('mongodb://localhost:27017/sy2antek')
   .then(async () => {
     console.log('Connected to DB');
     

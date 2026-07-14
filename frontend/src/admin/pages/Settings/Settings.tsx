@@ -100,7 +100,7 @@ export default function Settings() {
                   required
                   value={websiteName}
                   onChange={(e) => setWebsiteName(e.target.value)}
-                  placeholder="مثال: صيانتي"
+                  placeholder="مثال: صيانتك"
                   className="block w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl focus:ring-2 focus:ring-indigo-500 text-white placeholder-slate-700 text-sm focus:outline-none text-right"
                 />
               </div>
@@ -112,7 +112,7 @@ export default function Settings() {
                   required
                   value={supportEmail}
                   onChange={(e) => setSupportEmail(e.target.value)}
-                  placeholder="support@sa2yanti.com"
+                  placeholder="support@sy2antek.com"
                   className="block w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl focus:ring-2 focus:ring-indigo-500 text-white placeholder-slate-700 text-sm focus:outline-none text-right"
                 />
               </div>

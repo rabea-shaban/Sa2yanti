@@ -4,7 +4,7 @@ const settingsSchema = new mongoose.Schema(
   {
     websiteName: {
       type: String,
-      default: 'Sa2yanti',
+      default: 'sy2antek',
     },
     logo: {
       type: String,
@@ -12,7 +12,7 @@ const settingsSchema = new mongoose.Schema(
     },
     supportEmail: {
       type: String,
-      default: 'support@sa2yanti.com',
+      default: 'support@sy2antek.com',
     },
     phone: {
       type: String,

@@ -99,7 +99,7 @@ export default function Profile() {
             <FaArrowRight className="text-[10px]" />
           </button>
           <h2 className="text-2xl font-extrabold tracking-tight">إعدادات الحساب</h2>
-          <p className="text-white/70 text-xs mt-1">تعديل بيانات حسابك الشخصي وكلمة المرور في منصة صيانتي.</p>
+          <p className="text-white/70 text-xs mt-1">تعديل بيانات حسابك الشخصي وكلمة المرور في منصة صيانتك.</p>
         </div>
 
         {/* Form Container */}

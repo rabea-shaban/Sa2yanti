@@ -8,7 +8,7 @@
 [![Leaflet](https://img.shields.io/badge/Leaflet-1.9.4-red?style=for-the-badge&logo=leaflet)](https://leafletjs.com/)
 [![License](https://img.shields.io/badge/License-MIT-orange?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-**صيانتك (Sa2yanti)** هي منصة إلكترونية متكاملة تربط أصحاب المركبات بالفنيين ومراكز الصيانة القريبة جغرافيًا بشكل مباشر وتفاعلي، مع تزويد لوحات التحكم للأعضاء وللإدارة الفائقة لتسهيل وتنظيم دورة حياة الصيانة بالكامل.
+**صيانتك (sy2antek)** هي منصة إلكترونية متكاملة تربط أصحاب المركبات بالفنيين ومراكز الصيانة القريبة جغرافيًا بشكل مباشر وتفاعلي، مع تزويد لوحات التحكم للأعضاء وللإدارة الفائقة لتسهيل وتنظيم دورة حياة الصيانة بالكامل.
 
 ---
 
@@ -298,7 +298,7 @@ graph TD
 يتبع المشروع بنية المجلدات المنظمة للفصل الكامل بين واجهة المستخدم والمنطق الخلفي (Monorepo-like Folder Structure):
 
 ```
-Sa2yanti/
+sy2antek/
 ├── backend/                  # خادم المنصة (Node/Express/TS)
 │   ├── src/
 │   │   ├── config/           # إعدادات الاتصال بقاعدة البيانات
@@ -430,13 +430,13 @@ Sa2yanti/
    ```env
    PORT=5000
    SECRET_KEY=YourSuperSecureJWTSecretKeyHere
-   MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/sa2yanti?retryWrites=true&w=majority
+   MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/sy2antek?retryWrites=true&w=majority
    ```
-   > 💡 *يمكنك أيضاً استخدام مسار محلي لقاعدة البيانات مثل: `mongodb://localhost:27017/sa2yanti`*
+   > 💡 *يمكنك أيضاً استخدام مسار محلي لقاعدة البيانات مثل: `mongodb://localhost:27017/sy2antek`*
 
 4. **بذر البيانات تلقائياً (Database Seeding)**:
    عند تشغيل الخادم لأول مرة، يقوم النظام تلقائياً باستدعاء دالة البذر في الملف `src/utils/seed.ts` والتي تقوم بإنشاء:
-   * حساب المسؤول الفائق الافتراضي: **`admin@sa2yanti.com`** بكلمة مرور **`Admin@123`**
+   * حساب المسؤول الفائق الافتراضي: **`rabea@admin`** بكلمة مرور **`302060`**
    * الفئات الأساسية والخدمات باللغة العربية مع أسعارها.
    * إعدادات الموقع الافتراضية.
    * فنيين تجريبيين في القاهرة والمنيا بإحداثيات تفاعلية لتجربة البحث الجغرافي فوراً.
@@ -475,7 +475,7 @@ Sa2yanti/
 
 | الدور | البريد الإلكتروني (Email) | كلمة المرور (Password) | الملاحظات |
 | :--- | :--- | :--- | :--- |
-| **مسؤول فائق (Super Admin)** | `admin@sa2yanti.com` | `Admin@123` | للتحكم بلوحة الإدارة الكاملة عبر الرابط `/admin` |
+| **مسؤول فائق (Super Admin)** | `rabea@admin` | `302060` | للتحكم بلوحة الإدارة الكاملة عبر الرابط `/admin` |
 | **فني تجريبي (Cairo Tech)** | `ahmed@tech.com` | `Tech@123` | فني يقع في القاهرة (جسر السويس)، تقييم 4.8 |
 | **فني تجريبي (Minia Tech)** | `mostafa@tech.com` | `Tech@123` | فني يقع في المنيا (العدوة)، تقييم 4.9 |
 | **عميل تجريبي** | قم بإنشاء حساب عميل جديد من صفحة Register برقم هاتف وموقع |
