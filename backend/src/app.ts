@@ -9,6 +9,9 @@ app.use(cookieParser());
 // Middlewares
 const allowedOrigins = [
   'http://localhost:5173',
+  'http://localhost:5173/',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:5173/',
   'https://sy2antek.vercel.app',
   process.env.FRONTEND_URL,
 ].filter(Boolean) as string[];
@@ -17,10 +20,18 @@ app.use(
   cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+      // Remove trailing slash if present for strict matching
+      const cleanOrigin = origin.endsWith('/') ? origin.slice(0, -1) : origin;
+      
+      const isAllowed = allowedOrigins.some(o => {
+        const cleanAllowed = o.endsWith('/') ? o.slice(0, -1) : o;
+        return cleanAllowed === cleanOrigin;
+      });
+
+      if (isAllowed || cleanOrigin.endsWith('.vercel.app')) {
         return callback(null, true);
       }
-      return callback(new Error('Not allowed by CORS'), false);
+      return callback(new Error(`Not allowed by CORS: ${origin}`), false);
     },
     credentials: true,
   }),

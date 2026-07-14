@@ -14,8 +14,11 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    const isAuthCheck = error.config?.url?.includes('/auth/me');
-    if (error.response?.status === 401 && !isAuthCheck) {
+    const url = error.config?.url || '';
+    const isAuthCheck = url.includes('/auth/me');
+    const isLoginCheck = url.includes('/auth/login');
+    const isRegisterCheck = url.includes('/auth/register');
+    if (error.response?.status === 401 && !isAuthCheck && !isLoginCheck && !isRegisterCheck) {
       window.location.href = '/login';
     }
     return Promise.reject(error);

@@ -116,8 +116,8 @@ export const TechnicianDetailsPage: React.FC = () => {
 
       {/* Main Info Card */}
       <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm space-y-6">
-        <div className="flex flex-col sm:flex-row gap-6 items-start justify-between border-b border-slate-100 pb-6">
-          <div className="flex gap-4 items-start">
+        <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start justify-between border-b border-slate-100 pb-6">
+          <div className="flex flex-col sm:flex-row gap-4 items-center sm:items-start">
             {/* Avatar */}
             <div className="w-20 h-20 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-3xl font-extrabold border border-blue-100 shadow-inner overflow-hidden shrink-0">
               {tech.avatar ? (
@@ -128,7 +128,7 @@ export const TechnicianDetailsPage: React.FC = () => {
             </div>
 
             {/* Name, rating and completed jobs */}
-            <div className="space-y-2">
+            <div className="space-y-2 flex flex-col items-center sm:items-start">
               <div className="flex items-center gap-2">
                 <h2 className="text-2xl font-bold text-slate-900">{tech.name}</h2>
                 <span className="px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[10px] font-bold rounded-full">
@@ -137,7 +137,7 @@ export const TechnicianDetailsPage: React.FC = () => {
               </div>
 
               {/* Rating block */}
-              <div className="flex items-center gap-1.5 text-amber-500 justify-start">
+              <div className="flex flex-wrap items-center gap-1.5 text-amber-500 justify-center sm:justify-start">
                 <div className="flex text-xs">
                   {[...Array(5)].map((_, i) => (
                     <FaStar key={i} className={i < Math.round(tech.rating) ? 'text-amber-500' : 'text-slate-200'} />

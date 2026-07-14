@@ -101,23 +101,23 @@ export const NearbyCard: React.FC<NearbyCardProps> = ({ tech, selectedServiceId 
       </div>
 
       {/* Buttons */}
-      <div className="flex flex-row md:flex-col gap-2 w-full md:w-auto pt-4 md:pt-0 border-t border-slate-100 md:border-t-0 shrink-0">
+      <div className="grid grid-cols-1 sm:grid-cols-3 md:flex md:flex-col gap-2 w-full md:w-auto pt-4 md:pt-0 border-t border-slate-100 md:border-t-0 shrink-0">
         <button
           onClick={handleOrder}
-          className="flex-1 md:w-32 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-sm hover:shadow transition cursor-pointer"
+          className="w-full md:w-32 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-sm hover:shadow transition cursor-pointer"
         >
           اطلب الخدمة
         </button>
         <button
           onClick={handleNavigate}
-          className="flex-1 md:w-32 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition cursor-pointer"
+          className="w-full md:w-32 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition cursor-pointer"
         >
           <FaCompass className="text-slate-500" />
           ابدأ الملاحة
         </button>
         <button
           onClick={handleDetails}
-          className="flex-1 md:w-32 py-2.5 border border-slate-200 hover:bg-slate-50 text-slate-650 font-bold text-xs rounded-xl flex items-center justify-center gap-1 transition cursor-pointer"
+          className="w-full md:w-32 py-2.5 border border-slate-200 hover:bg-slate-50 text-slate-650 font-bold text-xs rounded-xl flex items-center justify-center gap-1 transition cursor-pointer"
         >
           عرض التفاصيل
           <FaChevronLeft className="text-[9px]" />

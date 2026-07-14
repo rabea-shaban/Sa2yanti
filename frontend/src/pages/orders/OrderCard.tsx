@@ -53,13 +53,13 @@ export default function OrderCard({ order }: { order: Order }) {
     <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-md transition duration-300 hover:shadow-lg hover:scale-[1.005]" dir="rtl">
 
       {/* Header */}
-      <div className="flex justify-between items-start gap-3">
-        <span className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${status.className}`}>
+      <div className="flex flex-col-reverse sm:flex-row justify-between items-start gap-4">
+        <span className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap self-start ${status.className}`}>
           {status.text}
         </span>
 
-        <div className="flex gap-3 items-start">
-          <div className="text-right">
+        <div className="flex gap-3 items-start w-full sm:w-auto justify-between sm:justify-start">
+          <div className="text-right flex-1 sm:flex-initial">
             <h3 className="text-lg md:text-2xl font-bold text-slate-900">{order.service}</h3>
 
             <div className="flex items-center gap-1.5 text-slate-500 mt-2 justify-end text-sm">
@@ -85,7 +85,7 @@ export default function OrderCard({ order }: { order: Order }) {
                 <button
                   type="button"
                   onClick={() => setShowMap(!showMap)}
-                  className="flex items-center gap-1.5 text-xs font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition"
+                  className="flex items-center gap-1.5 text-xs font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition cursor-pointer"
                 >
                   <FaMapMarkerAlt />
                   {showMap ? 'إخفاء الخريطة' : 'عرض الموقع على الخريطة'}
