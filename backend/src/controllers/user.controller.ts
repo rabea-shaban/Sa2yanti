@@ -5,6 +5,8 @@ import User from '../models/User.model';
 import Service from '../models/Service.model';
 import Settings from '../models/Settings.model';
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 interface IUser {
   name?: string;
   email: string;
@@ -129,8 +131,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     );
     res.cookie('token', token, {
       httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
       maxAge: 2 * 24 * 60 * 60 * 1000,
     });
 
@@ -157,8 +159,8 @@ export const profile = (req: any, res: Response) => {
 export const logout = async (req: Request, res: Response): Promise<void> => {
   res.clearCookie('token', {
     httpOnly: true,
-    secure: false,
-    sameSite: 'lax',
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
   });
 
   res.status(200).json({
@@ -245,8 +247,8 @@ export const updateProfile = async (req: any, res: Response): Promise<void> => {
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
       maxAge: 2 * 24 * 60 * 60 * 1000,
     });
 

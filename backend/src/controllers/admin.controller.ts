@@ -7,6 +7,8 @@ import Category from '../models/Category.model';
 import Service from '../models/Service.model';
 import Settings from '../models/Settings.model';
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 interface CustomRequest extends Request {
   user?: any;
 }
@@ -49,8 +51,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: false, // matches user configuration
-      sameSite: 'lax',
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
       maxAge: 2 * 24 * 60 * 60 * 1000,
     });
 
@@ -72,8 +74,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 export const logout = async (req: Request, res: Response): Promise<void> => {
   res.clearCookie('token', {
     httpOnly: true,
-    secure: false,
-    sameSite: 'lax',
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
   });
   res.status(200).json({ success: true, message: 'Admin Logout Successful' });
 };

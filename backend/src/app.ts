@@ -7,9 +7,21 @@ const app = express();
 app.use(cookieParser());
 
 // Middlewares
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://sy2antek.vercel.app',
+  process.env.FRONTEND_URL,
+].filter(Boolean) as string[];
+
 app.use(
   cors({
-    origin: 'https://sy2antek.vercel.app',
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+        return callback(null, true);
+      }
+      return callback(new Error('Not allowed by CORS'), false);
+    },
     credentials: true,
   }),
 );
