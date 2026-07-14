@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaStar, FaWrench, FaMapMarkerAlt, FaCompass, FaChevronLeft } from 'react-icons/fa';
+import { FaStar, FaMapMarkerAlt, FaCompass, FaChevronLeft } from 'react-icons/fa';
 import type { NearbyTechnician } from '../../services/nearby.service';
 
 interface NearbyCardProps {
@@ -83,20 +83,7 @@ export const NearbyCard: React.FC<NearbyCardProps> = ({ tech, selectedServiceId 
             </div>
           </div>
 
-          {/* Available Services */}
-          {tech.services && tech.services.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-2 justify-start">
-              {tech.services.map((serv) => (
-                <span
-                  key={serv._id}
-                  className="px-2.5 py-1 bg-slate-50 border border-slate-100 rounded-lg text-slate-600 text-[10px] font-semibold flex items-center gap-1"
-                >
-                  <FaWrench className="text-[8px] text-slate-400" />
-                  {serv.name}
-                </span>
-              ))}
-            </div>
-          )}
+
         </div>
       </div>
 
